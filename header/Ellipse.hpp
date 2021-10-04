@@ -23,7 +23,7 @@ namespace FrameWork
 		Ellipse();		//コンストラクタ
 		~Ellipse();		//デストラクタ
 
-		void Draw(glm::vec2 pos, glm::vec2 s, int num, float r);	// 描画		
+		void Draw(glm::vec2 pos,glm::vec4 color, glm::vec2 s, int num, float r);	// 描画		
 		
 
 	private:

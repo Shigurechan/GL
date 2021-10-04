@@ -23,7 +23,7 @@ FrameWork::Rectangle::Rectangle() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,float r)
+void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,float r)
 {
 	vertex->resize(6);
 
@@ -51,13 +51,16 @@ void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,float r)
 	setScale(end - start);		//スケール
 	setRotate(r);			//回転
 
+
+	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-
+	shader->setUniform4f("uFragment",color);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 	glDrawArrays(GL_TRIANGLES, 0, vertex->size());
+	shader->setDisable();
 
 }
 

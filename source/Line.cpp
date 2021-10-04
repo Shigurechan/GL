@@ -21,7 +21,7 @@ FrameWork::Line::Line() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,unsigned short width, float r)
+void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsigned short width, float r)
 {
 
 	glLineWidth(width);  //太さ
@@ -37,13 +37,15 @@ void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,unsigned short width, 
 	setScale(glm::vec2(1,1));							  								//スケール
 	setRotate(r);																	//回転
 
+	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-
+	shader->setUniform4f("uFragment",color);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 	glDrawArrays(GL_LINES, 0, vertex->size());
+	shader->setDisable();
 }
 
 // ##################################### デストラクタ ##################################### 

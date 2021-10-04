@@ -15,17 +15,17 @@
 
 #include "../header/Render.hpp"
 #include "../header/Camera.hpp"
+#include "../header/Resource.hpp"
 
 
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Text::Text() : FrameWork::Render_2D()
 {
     
-    fixedLength = std::make_unique<std::vector<String>>(0);    //　固定長文字列
 
     //シェーダー読み込み
-    shader = std::make_unique<FrameWork::Shader>();
-    
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
+
     vertex = FrameWork::Camera_2D::getVertexAttribute();
     vertex->resize(6);
 
@@ -33,14 +33,14 @@ FrameWork::Text::Text() : FrameWork::Render_2D()
     GLint attrib = shader->getAttribLocation("vertexPosition");
     glEnableVertexAttribArray(attrib);
     glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
     shader->setBindAttribLocation("vertexPosition");
 
     //UV
     attrib = shader->getAttribLocation("vertexUV");
     glEnableVertexAttribArray(attrib);
     glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 2));
+    glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 2));
     shader->setBindAttribLocation("vertexUV");
     
 }
@@ -64,19 +64,33 @@ std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
 }
 
 // ##################################### 固定長文字列　描画 ##################################### 
-void FrameWork::Text::DrawString(glm::vec2 pos,byte n)
+void FrameWork::Text::DrawString(glm::vec2 pos)
 {
+    RenderString(pos);
+}
 
-    RenderString(pos,fixedLength->at(n).text);
+void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
+{
+    
+    char buf[1024] = { '\0' };
+
+    va_list va;
+    va_start(va,args);
+    vsprintf(buf,args,va);
+    va_end(va);
+
+
+    std::vector<wchar_t> wc = getWchar_t(buf);  //wchar_t型　取得
+    setTexture(wc,text,color,pixelSize);        //テクスチャ　設定
 }
 
 
 // ##################################### テクスチャ　設定 ##################################### 
-void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::shared_ptr<std::vector<Character>>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
+void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
 {
     for (std::vector<wchar_t>::const_iterator itr = wc.begin(); itr != wc.end(); itr++)
     {
-        FT_Face face;// = Resource::getFont((Resource::Asset)font);
+        FT_Face face = LoadFont("Font/SourceHanCodeJP.ttc");
         FT_Set_Pixel_Sizes(face, 0, pixelSize);
         FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER);
         
@@ -114,22 +128,22 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::shared_ptr
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        text->push_back(ch);
+        text.push_back(ch);
     }    
 }
 
 
 
 // ##################################### 文字列を描画 ##################################### 
-void FrameWork::Text::RenderString(glm::vec2 pos,const std::shared_ptr<std::vector<Character>> character)
+void FrameWork::Text::RenderString(glm::vec2 pos)
 {
-    if (character->size() > 0)
+    if (text.size() > 0)
     {     
         vertex->resize(6);
 
         //色をRGBにして位置を反転
         int y = pos.y;
-        for (std::vector<Character>::const_iterator itr = character->begin(); itr->character != '\0'; itr++)
+        for (std::vector<Character>::const_iterator itr = text.begin(); itr->character != '\0'; itr++)
         {
             pos.y = FrameWork::windowContext->getSize().y - y - itr->pixelSize;
 
@@ -173,14 +187,16 @@ void FrameWork::Text::RenderString(glm::vec2 pos,const std::shared_ptr<std::vect
 
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(VertexAttribute), vertex->data());
 
+
+            shader->setEnable();
             shader->setUniform4f("uFragment", GetGlColor((glm::vec4)itr->color));
             shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
+            shader->setDisable();
 
             glBindTexture(GL_TEXTURE_2D, itr->textureID);
-
             glDrawArrays(GL_TRIANGLES, 0, vertex->size());
-
             glBindTexture(GL_TEXTURE_2D, 0);
+
 
             pos.x += ((itr->advance >> 6) * SCALE); //次のグリフに進める
 
@@ -194,8 +210,7 @@ void FrameWork::Text::RenderString(glm::vec2 pos,const std::shared_ptr<std::vect
 // ##################################### デストラクタ ##################################### 
 FrameWork::Text::~Text()
 {
-    
-    //FT_Done_FreeType(ft);
+        
 }
 
 

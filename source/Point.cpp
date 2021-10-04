@@ -22,7 +22,7 @@ FrameWork::Point::Point() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Point::Draw(glm::vec2 p,unsigned short s)
+void FrameWork::Point::Draw(glm::vec2 p,glm::vec4 color,unsigned short s)
 {
 	vertex->resize(1);	
 	glPointSize(s);		//サイズ
@@ -35,13 +35,15 @@ void FrameWork::Point::Draw(glm::vec2 p,unsigned short s)
 	setScale(glm::vec2(1,1));	//スケール
 	setRotate(0);			//回転
 
+	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-
+	shader->setUniform4f("uFragment",color);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 	glDrawArrays(GL_POINTS, 0, vertex->size());
+	shader->setDisable();
 }
 
 

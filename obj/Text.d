@@ -19,7 +19,8 @@ obj/Text.o: source/Text.cpp source/../header/Text.hpp \
  source/../header/Transform_2D.hpp source/../header/Window.hpp \
  source/../header/Init.hpp source/../header/Window.hpp \
  source/../header/Shader.hpp source/../header/Render.hpp \
- source/../header/Camera.hpp source/../header/Actor.hpp
+ source/../header/Camera.hpp source/../header/Actor.hpp \
+ source/../header/Resource.hpp
 
 source/../header/Text.hpp:
 
@@ -76,3 +77,5 @@ source/../header/Render.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/Resource.hpp:

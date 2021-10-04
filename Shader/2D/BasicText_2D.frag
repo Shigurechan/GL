@@ -1,18 +1,18 @@
 /*#########################################################################
-# ’PF‚Ì“ñŸŒ³ƒeƒLƒXƒgƒŒƒ“ƒ_ƒŠƒ“ƒO ƒtƒ‰ƒOƒƒ“ƒgƒVƒF[ƒ_[
+# 
 ###########################################################################*/
-#version 330
-#extension GL_ARB_explicit_attrib_location: enable 
+#version 420
+#extension GL_ARB_explicit_uniform_location : require
 
-// ###################### “ü—Í ###################### 
+// ######################ï¿½@###################### 
 layout(location = 1 ) in vec2 texCoord;
 
-// ###################### o—Í ###################### 
+// ######################  ###################### 
 out vec4 color;
 
 // ###################### Unifrom ###################### 
-uniform sampler2D text;     //•¶šƒeƒNƒXƒ`ƒƒ
-uniform vec4 uFragment;    //F
+uniform sampler2D text;   
+uniform vec4 uFragment;   
 
 void main()
 {    

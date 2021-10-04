@@ -12,6 +12,7 @@
 #include "Help.hpp"
 #include "Init.hpp"
 #include "Resource.hpp"
+
 //図形
 #include "Line.hpp"
 #include "Circle.hpp"

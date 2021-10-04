@@ -1,24 +1,24 @@
 /*#########################################################################
-# ’PF‚Ì“ñŸŒ³ƒeƒLƒXƒgƒŒƒ“ƒ_ƒŠƒ“ƒO ’¸“_ƒVƒF[ƒ_[
+#
 ###########################################################################*/
-#version 330
-#extension GL_ARB_explicit_attrib_location: enable 
+#version 420
+#extension GL_ARB_explicit_uniform_location : require
 
-// ###################### ’¸“_‘®« ###################### 
-layout(location = 0) in vec2 vertexPosition;	//’¸“_À•W
-layout(location = 1) in vec2 vertexUV;			//UVÀ•W
+// ######################  ###################### 
+layout(location = 0) in vec2 vertexPosition;	
+layout(location = 1) in vec2 vertexUV;		
 
 
-// ######################@o—Í ###################### 
-layout(location = 1) out vec2 texCoord;	//ƒeƒLƒXƒg
+// ######################ï¿½@###################### 
+layout(location = 1) out vec2 texCoord;
 
 // ###################### Uniform ###################### 
-uniform mat4 uViewProjection;	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+uniform mat4 uViewProjection;	
 
 void main()
 {
 
-	vec4 vertex = vec4(vertexPosition.x,vertexPosition.y,0.0,1.0);		//’¸“_À•W
+	vec4 vertex = vec4(vertexPosition.x,vertexPosition.y,0.0,1.0);	
 	gl_Position =  (uViewProjection * vertex);
 	
 	texCoord = vertexUV;

@@ -8,7 +8,7 @@ FrameWork::Transform_2D::Transform_2D()
 {
 	position = glm::vec2(0, 0);	//座標
 	scale = glm::vec2(1, 1);	//スケール
-	rotate = 0.0f;				//回転
+	rotate = 0.0f;			//回転
 	
 	//行列を初期化
 	matScale = glm::scale(glm::mat4(1), glm::vec3(1.0f, 1.0f, 1.0f));				//スケール

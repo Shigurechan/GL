@@ -21,7 +21,7 @@ namespace FrameWork
 		Point();	//コンストラクタ
 		~Point();	//デストラクタ
 
-		void Draw(glm::vec2 p,unsigned short s);	// 描画		
+		void Draw(glm::vec2 p,glm::vec4 color,unsigned short s);	// 描画		
 
 	private:
 

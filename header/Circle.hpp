@@ -25,7 +25,7 @@ namespace FrameWork
 		Circle();	//コンストラクタ
 		~Circle();	//デストラクタ
 
-		void Draw(const glm::vec2 pos, const GLushort num,const GLushort width, const GLfloat r);	//描画
+		void Draw(const glm::vec2 pos, const glm::vec4 color,const GLushort num,const GLushort width, const GLfloat r);	//描画
 
 	private:
 

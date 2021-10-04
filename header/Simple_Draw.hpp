@@ -3,8 +3,10 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <iostream>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 
 #include "Resource.hpp"
 
@@ -24,10 +26,6 @@ namespace FrameWork
 	void DrawLine(glm::vec2 start, glm::vec2 end, GLfloat width, float r, glm::vec4 color);						//線
 	void DrawTriangle(glm::vec2 pos, glm::vec2 size, GLdouble r, glm::vec4 color);							//三角形
 	void DrawEllipse(glm::vec2 pos,glm::vec2 size, unsigned short num, GLdouble r, glm::vec4 color);				//楕円
-
-
-
-
 
 	glm::vec2 getWindowPosition(glm::vec2 pos);	//スクリーン座標を取得
 }

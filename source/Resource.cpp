@@ -4,8 +4,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/stb_image.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+
+FT_Library FrameWork::ft;
+
+
 //テクスチャをロード
-TextureFile LoadTexture(const char* fileName)
+FrameWork::TextureFile FrameWork::LoadTexture(const char* fileName)
 {
       TextureFile data;
 	data.fileData = NULL;      
@@ -18,14 +25,14 @@ TextureFile LoadTexture(const char* fileName)
 	}
 
       return data;
+
 }
 
-
 //シェーダーファイルをロード
-ShaderFile LoadShader(const char* fileName)
+std::shared_ptr<std::vector<GLchar>> FrameWork::LoadShader(const char* fileName)
 {
 
-      ShaderFile data;
+      
 
       std::ifstream file(fileName, std::ios::binary);
       if (file.fail() == true)
@@ -46,17 +53,32 @@ ShaderFile LoadShader(const char* fileName)
             buffer->at(length) = ('\0');
             file.close();
 
-            data.fileData = buffer;
+            return buffer;      
       }
 
       file.close();
       
-	
 }
 
 
-SoundFile LoadSound(const char* fileName)
+FrameWork::SoundFile FrameWork::LoadSound(const char* fileName)
 {
 
 }
 
+FT_Face FrameWork::LoadFont(const char* fileName)
+{
+      
+      FT_Face face;
+
+      FT_Error error = FT_New_Face(FrameWork::ft,fileName, 0, &face);
+      if (error != 0)
+      {
+            std::cerr << "FreeType フォントを読み込めません: " << error << std::endl;
+            assert(0);
+      }
+      else
+      {
+            return face;
+      }
+}

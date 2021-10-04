@@ -19,7 +19,7 @@ namespace FrameWork
 		Line();	//コンストラクタ
 		~Line();	//デストラクタ
 
-		void Draw(glm::vec2 start, glm::vec2 end, unsigned short width, float r);	// 描画		
+		void Draw(glm::vec2 start, glm::vec2 end, glm::vec4 color,unsigned short width, float r);	// 描画		
 
 	private:
 

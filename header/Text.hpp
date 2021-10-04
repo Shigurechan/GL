@@ -26,6 +26,7 @@
 namespace FrameWork
 {
 
+
     class Text : public FrameWork::Render_2D
     {
     private:
@@ -43,53 +44,23 @@ namespace FrameWork
 
         }Character;
 
-        //文字列 構造体
-        typedef struct 
-        {
-            std::shared_ptr<std::vector<Character>> text;   // 文字列
-            glm::lowp_u16vec2 size;                         // 文字列のサイズ
-            byte font;                                      // フォント
-        }String;
-
     public:
 
         Text();   //コンストラクタ
         ~Text();  //デストラクタ
-
-        // ##################################### 固定長文字列　文字列　設定 ##################################### 
       
-        void setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
-        {
-            
-            //std::string str = std::format(text, args...);
-            char buf[1024] = { '\0' };
+        void setString(const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...);
+        void DrawString(glm::vec2 pos);
 
-            va_list va;
-            va_start(va,args);
-            vsprintf(buf,args,va);
-            va_end(va);
-
-            
-            String string;
-            string.text = std::make_shared<std::vector<Character>>(0);
-
-            std::vector<wchar_t> wc = getWchar_t(buf);  //wchar_t型　取得
-            setTexture(wc,string.text,color,pixelSize);    //テクスチャ　設定
-
-
-            fixedLength->push_back(string);
-        }
-
-        void DrawString(glm::vec2 pos,byte n);
-
-        void DrawSentence(glm::vec2 pos, unsigned short num, byte style);
     private:
 
         std::vector<wchar_t> getWchar_t(const char* str);
-        void setTexture(const std::vector<wchar_t>& wc, std::shared_ptr<std::vector<Character>>& text, const glm::lowp_u8vec4 color, const byte pixelSize);
-        void RenderString(glm::vec2 pos, const std::shared_ptr<std::vector<Character>> character);
-        std::unique_ptr<std::vector<String>> fixedLength;    //　固定長文字列
-        
+        void setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize);
+        void RenderString(glm::vec2 pos);        
+
+        std::vector<Character> text;
+
+
     };
 };
 #endif

@@ -20,7 +20,7 @@ namespace FrameWork
 		Rectangle();	//コンストラクタ
 		~Rectangle();	//デストラクタ
 
-		void Draw(glm::vec2 start, glm::vec2 end, float r);
+		void Draw(glm::vec2 start, glm::vec2 end, glm::vec4 color,float r);
 
 
 	private:

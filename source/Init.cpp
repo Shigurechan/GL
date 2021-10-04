@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../header/Window.hpp"
+#include "../header/Resource.hpp"
 
 namespace FrameWork
 {
@@ -12,6 +13,15 @@ namespace FrameWork
 	// ##################################### 初期化 ##################################### 
 	bool Init(glm::ivec2 size,glm::ivec2 ver, const char* title)
 	{
+
+		if (FT_Init_FreeType(&ft) != 0)
+		{
+			std::cerr << "FreeType を初期化出来ません。" << std::endl;
+			assert(0);
+		}
+
+
+
 		setlocale(LC_CTYPE, "");    //ローカルを設定
 
 		if (glfwInit() == GL_FALSE)

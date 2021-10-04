@@ -16,7 +16,7 @@ FrameWork::Ellipse::Ellipse() : Render_2D()
 	
 }
 // ##################################### 描画　設定 ##################################### 
-void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec2 s, int num,float r)
+void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int num,float r)
 {
 
 	if (vertNum != num)
@@ -27,7 +27,7 @@ void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec2 s, int num,float r)
 		GLint attrib = shader->getAttribLocation("vertexPosition");
 		glEnableVertexAttribArray(attrib);
 		glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-		glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
+		glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
 		shader->setBindAttribLocation("vertexPosition");
 	
 	}
@@ -48,12 +48,14 @@ void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec2 s, int num,float r)
 	setScale(glm::vec2(1,1));		//スケール
 	setRotate(r);				//回転
 
+	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-
+	shader->setUniform4f("uFragment",color);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, vertex->size());
+	shader->setDisable();
 
 }
 

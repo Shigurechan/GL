@@ -1,7 +1,8 @@
 /*#########################################################################
 # 単色の二次元描画　フラグメントシェーダー
 ###########################################################################*/
-#extension GL_ARB_explicit_attrib_location: enable 
+#version 420
+#extension GL_ARB_explicit_uniform_location : require
 
 // ###################### 入力 ###################### 
 layout(location = 2) in vec4 vfragment;	//カラー
