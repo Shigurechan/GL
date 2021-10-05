@@ -9,7 +9,7 @@ layout(location = 0) in vec2 vertexPosition;
 layout(location = 1) in vec2 vertexUV;		
 
 
-// ######################�@###################### 
+// ###################### ###################### 
 layout(location = 1) out vec2 texCoord;
 
 // ###################### Uniform ###################### 

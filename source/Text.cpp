@@ -1,18 +1,18 @@
-#include <iostream>
 #include "../header/Text.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+
 #include <uchar.h>
+#include <iostream>
+#include <vector>
+#include <iostream>
+
 #include "../header/Window.hpp"
 #include "../header/Init.hpp"
 #include "../header/Shader.hpp"
-#include <iostream>
-#include <vector>
-
 #include "../header/Render.hpp"
 #include "../header/Camera.hpp"
 #include "../header/Resource.hpp"
@@ -21,8 +21,6 @@
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Text::Text() : FrameWork::Render_2D()
 {
-    
-
     //シェーダー読み込み
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
 
@@ -79,7 +77,6 @@ void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 co
     vsprintf(buf,args,va);
     va_end(va);
 
-
     std::vector<wchar_t> wc = getWchar_t(buf);  //wchar_t型　取得
     setTexture(wc,text,color,pixelSize);        //テクスチャ　設定
 }
@@ -88,12 +85,17 @@ void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 co
 // ##################################### テクスチャ　設定 ##################################### 
 void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
 {
+    text.clear();
+
+    FT_Face face = LoadFont("Font/PressStart2P.ttf");
+    FT_Set_Pixel_Sizes(face, 0, pixelSize);
+
     for (std::vector<wchar_t>::const_iterator itr = wc.begin(); itr != wc.end(); itr++)
     {
-        FT_Face face = LoadFont("Font/SourceHanCodeJP.ttc");
-        FT_Set_Pixel_Sizes(face, 0, pixelSize);
         FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER);
         
+        printf("%ld\n",face->glyph->advance.x);
+
         Character ch =
         {
             0,
@@ -185,17 +187,16 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
             vertex->at(5).uv[0] = 1.0f;
             vertex->at(5).uv[1] = 0.0f;
 
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(VertexAttribute), vertex->data());
 
 
             shader->setEnable();
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(VertexAttribute), vertex->data());
             shader->setUniform4f("uFragment", GetGlColor((glm::vec4)itr->color));
             shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
-            shader->setDisable();
-
             glBindTexture(GL_TEXTURE_2D, itr->textureID);
             glDrawArrays(GL_TRIANGLES, 0, vertex->size());
             glBindTexture(GL_TEXTURE_2D, 0);
+            shader->setDisable();
 
 
             pos.x += ((itr->advance >> 6) * SCALE); //次のグリフに進める
@@ -212,5 +213,3 @@ FrameWork::Text::~Text()
 {
         
 }
-
-

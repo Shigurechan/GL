@@ -29,7 +29,6 @@ void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GL
 		vertex->resize(num);
 		vertNum = num;
 
-		printf("あああ");
 
 		//頂点	
 		GLint attrib = shader->getAttribLocation("vertexPosition");

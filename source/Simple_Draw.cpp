@@ -513,7 +513,7 @@ namespace FrameWork
 
             //グリフ解放
             FT_Done_Face(face);
-            FT_Done_FreeType(ft);
+            //FT_Done_FreeType(ft);
         }
     }
 

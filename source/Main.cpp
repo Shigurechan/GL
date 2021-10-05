@@ -7,12 +7,12 @@
 
 int main()
 {
-	FrameWork::Init(glm::ivec2(48 * 26, 48 * 18), glm::ivec2(4, 2), "Dungeon");	//　初期化
+	FrameWork::Init(glm::ivec2(48 * 26, 48 * 18), glm::ivec2(4, 5), "Dungeon");	//　初期化
 	FrameWork::Camera_2D::Init();	//カメラ初期化
 
 	FrameWork::Circle circle;
 	FrameWork::Text text;
-	text.setString(30,glm::vec4(255,0,0,255),"test %d",1);
+	text.setString(30,glm::vec4(255,0,0,255),"Hello World");
 
 	while (*FrameWork::windowContext)
 	{
