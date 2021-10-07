@@ -2,7 +2,7 @@
 #
 ###########################################################################*/
 #version 420
-#extension GL_ARB_explicit_uniform_location : require
+//#extension GL_ARB_explicit_uniform_location : require
 
 // ######################  ###################### 
 layout(location = 0) in vec2 vertexPosition;	

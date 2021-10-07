@@ -21,11 +21,14 @@
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Text::Text() : FrameWork::Render_2D()
 {
+
     //シェーダー読み込み
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
 
     vertex = FrameWork::Camera_2D::getVertexAttribute();
     vertex->resize(6);
+
+    text.clear();
 
     //頂点	
     GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -48,7 +51,7 @@ std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
 {
     std::vector<wchar_t> newText(0);
 
-    int i, j, f;
+    int i = 0, j = 0, f = 0;
     for (i = 0, j = 0; str[j] != '\0'; i++, j += f)
     {
         wchar_t t;
@@ -57,6 +60,12 @@ std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
     }
 
     newText.push_back(L'\0');
+
+    for(std::vector<wchar_t>::const_iterator itr = newText.begin(); itr != newText.end(); itr++)
+    {
+        //printf("%c\n",*itr);
+    }
+
 
     return newText;
 }
@@ -69,14 +78,14 @@ void FrameWork::Text::DrawString(glm::vec2 pos)
 
 void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
 {
-    
+    text.clear();
+
     char buf[1024] = { '\0' };
 
     va_list va;
     va_start(va,args);
     vsprintf(buf,args,va);
     va_end(va);
-
     std::vector<wchar_t> wc = getWchar_t(buf);  //wchar_t型　取得
     setTexture(wc,text,color,pixelSize);        //テクスチャ　設定
 }
@@ -86,16 +95,36 @@ void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 co
 void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
 {
     text.clear();
-
     FT_Face face = LoadFont("Font/PressStart2P.ttf");
-    FT_Set_Pixel_Sizes(face, 0, pixelSize);
 
     for (std::vector<wchar_t>::const_iterator itr = wc.begin(); itr != wc.end(); itr++)
     {
-        FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER);
-        
-        printf("%ld\n",face->glyph->advance.x);
 
+        if(FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER) != 0)
+        {
+            std::cout<< "Error: FT_Load_Glyph " <<std::endl;
+			assert(0);
+
+        }
+
+        if(FT_Set_Pixel_Sizes(face, 0, pixelSize) != 0)
+        {
+            std::cout<< "Error: FT_Set_Pixel_Sizes " <<std::endl;
+			assert(0);
+
+        }
+
+        //printf("%c\n",*itr);  //ここに文字が来ている。
+/*
+        printf("face->glyph->bitmap.width %ld\n",face->glyph->bitmap.width);
+        printf("face->glyph->bitmap.rows %ld\n",face->glyph->bitmap.rows);
+        printf("face->glyph->bitmap_left %ld\n",face->glyph->bitmap_left);
+        printf("face->glyph->bitmap_top %ld\n",face->glyph->bitmap_top);
+        printf("face->glyph->advance.x %ld\n",face->glyph->advance.x);
+        printf("character %c\n",*itr);
+        printf("pixelSize %ld\n",pixelSize);
+        printf("\n\n\n");
+*/
         Character ch =
         {
             0,
@@ -105,11 +134,11 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
             *itr,
             color,
             pixelSize
+
         };
 
         glGenTextures(1, &ch.textureID);
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
-        glActiveTexture(GL_TEXTURE0);
 
         glTexImage2D
         (
@@ -124,11 +153,15 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
             face->glyph->bitmap.buffer
         );
 
-        //テクスチャタイプを設定
+                //テクスチャタイプを設定
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glActiveTexture(GL_TEXTURE0);
+
+
 
         text.push_back(ch);
     }    
@@ -145,8 +178,11 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
 
         //色をRGBにして位置を反転
         int y = pos.y;
-        for (std::vector<Character>::const_iterator itr = text.begin(); itr->character != '\0'; itr++)
+        for (std::vector<Character>::const_iterator itr = text.begin(); itr->character != L'\0'; itr++)
         {
+            //printf("%c  %d\n",itr->character,itr->textureID); //ここに来ている
+
+
             pos.y = FrameWork::windowContext->getSize().y - y - itr->pixelSize;
 
 #define SCALE 1.0f  //文字の大きさ

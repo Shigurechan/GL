@@ -22,7 +22,8 @@ obj/Main.o: source/Main.cpp source/../header/FrameWork.hpp \
  source/../header/Init.hpp source/../header/Line.hpp \
  source/../header/Circle.hpp source/../header/Rectangle.hpp \
  source/../header/Triangle.hpp source/../header/Ellipse.hpp \
- source/../header/Point.hpp source/../header/Camera.hpp
+ source/../header/Point.hpp source/../header/Sprite.hpp \
+ source/../header/Camera.hpp
 
 source/../header/FrameWork.hpp:
 
@@ -91,5 +92,7 @@ source/../header/Triangle.hpp:
 source/../header/Ellipse.hpp:
 
 source/../header/Point.hpp:
+
+source/../header/Sprite.hpp:
 
 source/../header/Camera.hpp:

@@ -20,7 +20,7 @@ FrameWork::TextureFile FrameWork::LoadTexture(const char* fileName)
 
 	if (data.fileData == NULL)
 	{
-		std::cerr << "アセットが見つかりません: " << fileName << std::endl;
+		std::cerr << "画像が見つかりません: " << fileName << std::endl;
 		assert(0);
 	}
 
@@ -63,7 +63,7 @@ std::shared_ptr<std::vector<GLchar>> FrameWork::LoadShader(const char* fileName)
 
 FrameWork::SoundFile FrameWork::LoadSound(const char* fileName)
 {
-
+      
 }
 
 FT_Face FrameWork::LoadFont(const char* fileName)

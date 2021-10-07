@@ -32,12 +32,18 @@ namespace FrameWork
 
 		windowContext = std::make_shared<Window>(size, title);	//ウインドウコンテキストを生成
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
+
 		//OpenGL Verison 4.5 Core Profile　を選択する
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver.x);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver.y);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		atexit(glfwTerminate);	//プログラム終了時の処理を登録
 

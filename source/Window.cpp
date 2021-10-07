@@ -16,8 +16,8 @@ FrameWork::Window::Window(glm::ivec2 size, const char* title)
 //	window = glfwCreateWindow(size.x, size.y, title, NULL, NULL);
 
 	//変数を初期化
-	std::fill(std::begin(keyBoard), std::end(keyBoard), 0);			//キーボード入力配列を初期化
-	std::fill(std::begin(key), std::end(key), 0);					//キーボード入力配列を初期化
+	std::fill(std::begin(keyBoard), std::end(keyBoard), 0);		//キーボード入力配列を初期化
+	std::fill(std::begin(key), std::end(key), 0);				//キーボード入力配列を初期化
 	std::fill(std::begin(mouseButton), std::end(mouseButton), 0);	//マウス入力配列を初期化
 
 	mouseWheel = 0;	//マウスホイール
