@@ -4,10 +4,13 @@
 #include "../header/Window.hpp"
 #include "../header/Shader.hpp"
 #include "../header/Camera.hpp"
+#include "../header/Resource.hpp"
 
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Line::Line() : Render_2D()
 {	
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
 	vertex->resize(2);
 
@@ -24,18 +27,46 @@ FrameWork::Line::Line() : Render_2D()
 void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsigned short width, float r)
 {
 
-	glLineWidth(width);  //太さ
-	glm::vec2 size = glm::abs(end - start) / 2.0f;
-	vertex->at(0).position[0] = -size.x;
-	vertex->at(0).position[1] = -size.y;
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	vertex->at(1).position[0] = +size.x;
-	vertex->at(1).position[1] = +size.y;
+	vertex->resize(2);
+
+	glLineWidth(width);  //太さ
+	glm::vec2 size = glm::abs(glm::vec2(end.x - start.x,end.y - start.y)) / 2.0f;
+	glm::vec2 center = glm::vec2(end.x + start.x,end.y + start.y) / 2.0f;
+
+
+	vertex->at(0).position[0] += -center.x;
+	vertex->at(0).position[1] += -center.y;			
+	
+	vertex->at(1).position[0] += -center.x;
+	vertex->at(1).position[1] += -center.y;			
+
+ // let xx = (cos(PI / 2 * this.rotate) * (x - 1.5)) + (-sin(PI / 2 * this.rotate) * (y - 1.5) );
+//let yy = (sin(PI / 2 * this.rotate) * (x - 1.5)) + (cos(PI / 2 * this.rotate) * (y - 1.5) );
+
+	vertex->at(0).position[0] = (cos(r) * (vertex->at(0).position[0])) + (-sin(r) * (vertex->at(0).position[1]));
+	vertex->at(0).position[1] = (sin(r) * (vertex->at(0).position[0])) + (cos(r) * (vertex->at(0).position[1]));
+
+	vertex->at(1).position[0] = (cos(r) * (vertex->at(1).position[0])) + (-sin(r) * (vertex->at(1).position[1]));
+	vertex->at(1).position[1] = (sin(r) * (vertex->at(1).position[0])) + (cos(r) * (vertex->at(1).position[1]));
+
+
+	vertex->at(0).position[0] += center.x;
+	vertex->at(0).position[1] += center.y;			
+
+	vertex->at(1).position[0] += center.x;
+	vertex->at(1).position[1] += center.y;			
+
+	printf("%f\n",vertex->at(1).position[1]);
+
 
 	//Transform
-	setPosition(glm::vec2(FrameWork::windowContext->getSize().x / 2, FrameWork::windowContext->getSize().y / 2));	//座標
-	setScale(glm::vec2(1,1));							  								//スケール
-	setRotate(r);																	//回転
+
+	setPosition(glm::vec2(0,0));	//座標
+	setScale(glm::vec2(1,1));	//スケール
+	setRotate(0);			//回転
 
 	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
@@ -46,6 +77,11 @@ void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsign
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 	glDrawArrays(GL_LINES, 0, vertex->size());
 	shader->setDisable();
+
+	//バインド解除
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // ##################################### デストラクタ ##################################### 

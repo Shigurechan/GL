@@ -28,6 +28,8 @@ namespace FrameWork
 		
 		std::shared_ptr<std::vector<VertexAttribute>> vertex;	//頂点情報
 
+		GLuint vao;	//VertexArrayObject
+		GLuint vbo;	//VertexBufferObject	
 	};
 };
 

@@ -18,7 +18,8 @@ obj/Point.o: source/Point.cpp source/../header/Point.hpp \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Window.hpp source/../header/Shader.hpp \
- source/../header/Camera.hpp source/../header/Actor.hpp
+ source/../header/Camera.hpp source/../header/Actor.hpp \
+ source/../header/Resource.hpp
 
 source/../header/Point.hpp:
 
@@ -73,3 +74,5 @@ source/../header/Shader.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/Resource.hpp:

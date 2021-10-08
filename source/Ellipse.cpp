@@ -6,22 +6,29 @@
 #include "../header/Window.hpp"
 #include "../header/Shader.hpp"
 #include "../header/Camera.hpp"
+#include "../header/Resource.hpp"
 
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Ellipse::Ellipse() : Render_2D()
 {	
 	
-	vertNum = 0;		//頂点数
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+
+	vertNum = 0; //頂点数
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
 	
 }
 // ##################################### 描画　設定 ##################################### 
 void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int num,float r)
 {
+	shader->setEnable();
 
-	if (vertNum != num)
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	if (vertex->size() != num)
 	{
-		vertNum = num;
+		
 		vertex->resize(num);
 		//頂点	
 		GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -48,7 +55,6 @@ void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int nu
 	setScale(glm::vec2(1,1));		//スケール
 	setRotate(r);				//回転
 
-	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
@@ -57,6 +63,10 @@ void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int nu
 	glDrawArrays(GL_TRIANGLE_FAN, 0, vertex->size());
 	shader->setDisable();
 
+
+	//バインド解除
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 // ##################################### デストラクタ ##################################### 

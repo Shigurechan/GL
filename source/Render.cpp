@@ -9,6 +9,14 @@
 FrameWork::Render_2D::Render_2D()
 {
 	shader = std::make_shared<FrameWork::Shader>();	//シェーダー
+	
+	//vao
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	//vbo
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 }
 
 // ##################################### デストラクタ ##################################### 

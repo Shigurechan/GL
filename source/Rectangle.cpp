@@ -5,10 +5,12 @@
 #include "../header/Shader.hpp"
 #include "../header/VertexData.hpp"
 #include "../header/Camera.hpp"
+#include "../header/Resource.hpp"
 
 // ##################################### コンストラクタ ##################################### 
 FrameWork::Rectangle::Rectangle() : Render_2D()
 {		
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 	
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
 	vertex->resize(6);
@@ -25,6 +27,10 @@ FrameWork::Rectangle::Rectangle() : Render_2D()
 // ##################################### 描画 ##################################### 
 void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,float r)
 {
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
 	vertex->resize(6);
 
 	// 頂点座標
@@ -62,6 +68,9 @@ void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,fl
 	glDrawArrays(GL_TRIANGLES, 0, vertex->size());
 	shader->setDisable();
 
+	//バインド解除
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 // ##################################### デストラクタ ##################################### 

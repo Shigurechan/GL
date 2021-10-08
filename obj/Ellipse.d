@@ -19,7 +19,8 @@ obj/Ellipse.o: source/Ellipse.cpp source/../header/Ellipse.hpp \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Window.hpp source/../header/Shader.hpp \
- source/../header/Camera.hpp source/../header/Actor.hpp
+ source/../header/Camera.hpp source/../header/Actor.hpp \
+ source/../header/Resource.hpp
 
 source/../header/Ellipse.hpp:
 
@@ -78,3 +79,5 @@ source/../header/Shader.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/Resource.hpp:

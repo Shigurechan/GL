@@ -9,6 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <iostream>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 
 #include "../header/Window.hpp"
 #include "../header/Init.hpp"
@@ -26,8 +29,6 @@ FrameWork::Text::Text() : FrameWork::Render_2D()
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
 
     vertex = FrameWork::Camera_2D::getVertexAttribute();
-    vertex->resize(6);
-
     text.clear();
 
     //頂点	
@@ -61,12 +62,6 @@ std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
 
     newText.push_back(L'\0');
 
-    for(std::vector<wchar_t>::const_iterator itr = newText.begin(); itr != newText.end(); itr++)
-    {
-        //printf("%c\n",*itr);
-    }
-
-
     return newText;
 }
 
@@ -96,35 +91,26 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
 {
     text.clear();
     FT_Face face = LoadFont("Font/PressStart2P.ttf");
-
+    
     for (std::vector<wchar_t>::const_iterator itr = wc.begin(); itr != wc.end(); itr++)
     {
-
-        if(FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER) != 0)
+    
+        FT_Error err = FT_Set_Pixel_Sizes(face, 0, pixelSize);
+        if( err != 0)
         {
-            std::cout<< "Error: FT_Load_Glyph " <<std::endl;
+            std::cerr<< "Error: FT_Set_Pixel_Sizes: " << err <<std::endl;
 			assert(0);
 
         }
 
-        if(FT_Set_Pixel_Sizes(face, 0, pixelSize) != 0)
+        err = FT_Load_Glyph(face, FT_Get_Char_Index(face, *itr), FT_LOAD_RENDER);
+        if(err != 0)
         {
-            std::cout<< "Error: FT_Set_Pixel_Sizes " <<std::endl;
+            std::cerr<< "Error: FT_Load_Glyph: " <<err<<std::endl;
 			assert(0);
 
         }
 
-        //printf("%c\n",*itr);  //ここに文字が来ている。
-/*
-        printf("face->glyph->bitmap.width %ld\n",face->glyph->bitmap.width);
-        printf("face->glyph->bitmap.rows %ld\n",face->glyph->bitmap.rows);
-        printf("face->glyph->bitmap_left %ld\n",face->glyph->bitmap_left);
-        printf("face->glyph->bitmap_top %ld\n",face->glyph->bitmap_top);
-        printf("face->glyph->advance.x %ld\n",face->glyph->advance.x);
-        printf("character %c\n",*itr);
-        printf("pixelSize %ld\n",pixelSize);
-        printf("\n\n\n");
-*/
         Character ch =
         {
             0,
@@ -134,7 +120,6 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
             *itr,
             color,
             pixelSize
-
         };
 
         glGenTextures(1, &ch.textureID);
@@ -153,15 +138,11 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
             face->glyph->bitmap.buffer
         );
 
-                //テクスチャタイプを設定
+        //テクスチャタイプを設定
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glActiveTexture(GL_TEXTURE0);
-
-
 
         text.push_back(ch);
     }    
@@ -174,14 +155,11 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
 {
     if (text.size() > 0)
     {     
-        vertex->resize(6);
 
         //色をRGBにして位置を反転
         int y = pos.y;
         for (std::vector<Character>::const_iterator itr = text.begin(); itr->character != L'\0'; itr++)
         {
-            //printf("%c  %d\n",itr->character,itr->textureID); //ここに来ている
-
 
             pos.y = FrameWork::windowContext->getSize().y - y - itr->pixelSize;
 
@@ -192,7 +170,8 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
 
             float w = itr->size.x * SCALE;
             float h = itr->size.y * SCALE;
-
+            
+            vertex->resize(6);
             vertex->at(0).position[0] = xpos;
             vertex->at(0).position[1] = ypos + h;
             vertex->at(0).uv[0] = 0.0f;
@@ -226,12 +205,24 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
 
 
             shader->setEnable();
+
+            glBindVertexArray(vao);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBindTexture(GL_TEXTURE_2D, itr->textureID);
+
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(VertexAttribute), vertex->data());
+
             shader->setUniform4f("uFragment", GetGlColor((glm::vec4)itr->color));
             shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
-            glBindTexture(GL_TEXTURE_2D, itr->textureID);
+
             glDrawArrays(GL_TRIANGLES, 0, vertex->size());
-            glBindTexture(GL_TEXTURE_2D, 0);
+
+            //バインド解除
+	        glBindVertexArray(0);
+	        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	        glBindTexture(GL_TEXTURE_2D, 0);
+	
             shader->setDisable();
 
 

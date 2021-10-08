@@ -19,7 +19,7 @@ obj/Rectangle.o: source/Rectangle.cpp source/../header/Rectangle.hpp \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Window.hpp source/../header/Shader.hpp \
  source/../header/VertexData.hpp source/../header/Camera.hpp \
- source/../header/Actor.hpp
+ source/../header/Actor.hpp source/../header/Resource.hpp
 
 source/../header/Rectangle.hpp:
 
@@ -76,3 +76,5 @@ source/../header/VertexData.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/Resource.hpp:

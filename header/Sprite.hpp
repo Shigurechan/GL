@@ -65,8 +65,7 @@ namespace FrameWork
 		glm::vec2 startSize;	//始点
 		glm::vec2 endSize;	//終点
 
-		GLuint vao;	//VertexArrayObject
-		GLuint vbo;	//VertexBufferObject	
+	
 
 		std::vector<Texture> texture;	//テクスチャデータ
 		int textureNumber = 0;		//描画テクスチャナンバー

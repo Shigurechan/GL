@@ -16,7 +16,6 @@ FrameWork::Circle::Circle() : Render_2D()
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
 
 	
-	vertNum = 0;
 
 }
 
@@ -24,10 +23,12 @@ FrameWork::Circle::Circle() : Render_2D()
 void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GLushort num, const GLushort w, const GLfloat r)
 {	
 
-	if (vertNum != num)
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	if (vertex->size() != num)
 	{
 		vertex->resize(num);
-		vertNum = num;
 
 
 		//頂点	
@@ -63,6 +64,9 @@ void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GL
 	glDrawArrays(GL_TRIANGLE_FAN, 0, vertex->size());
 	shader->setDisable();
 
+	//バインド解除
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 // ##################################### デストラクタ ##################################### 

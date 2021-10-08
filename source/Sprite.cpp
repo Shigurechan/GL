@@ -15,20 +15,15 @@
 // ##################################### コンストラクタ ##################################### 	
 FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
 {
-	glEnable(GL_TEXTURE_2D);
 
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicTexture_2D.frag")->data());
 
 
-	//vao
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 
-	//vbo
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
+
+	//printf("%d",vertex->size());
 
       //頂点	
       GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -62,8 +57,6 @@ FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
 // ##################################### テクスチャ 設定 ##################################### 
 void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 {
-	//glPixelStorei(GL_PACK_ALIGNMENT, 4);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	Texture data;
 	data.size = tex.size;
@@ -80,16 +73,17 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 	glGenTextures(1, &texture.back().ID);			//テクスチャIDの生成
 	glBindTexture(GL_TEXTURE_2D, texture.back().ID);	//IDをバインド
 
-	// テクスチャの補間設定
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	//テクスチャ生成
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.back().size.x, texture.back().size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.back().data);
-	glGenerateMipmap(GL_TEXTURE_2D);
 	
+	// テクスチャの補間設定
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 	texture.back().unitNumber = GL_TEXTURE0 + (int)textureUnitCount;
 
 	//テクスチャユニットを設定できない場合はエラー
@@ -110,6 +104,8 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 void FrameWork::Sprite::setAttribute()
 {
 
+	vertex->resize(6);
+	
 	// 頂点座標
 	vertex->at(0).position[0] = -0.5f;
 	vertex->at(0).position[1] = 0.5f;
@@ -167,7 +163,7 @@ void FrameWork::Sprite::setAttribute()
 // ##################################### 法線　設定 ##################################### 	
 void FrameWork::Sprite::setNormal(std::array<glm::vec3, 6> n)
 {
-
+/*
 	vertex->at(0).normal[0] = n.at(0).x;
 	vertex->at(0).normal[1] = n.at(0).y;
 	vertex->at(0).normal[2] = n.at(0).z;
@@ -191,15 +187,16 @@ void FrameWork::Sprite::setNormal(std::array<glm::vec3, 6> n)
 	vertex->at(5).normal[0] = n.at(5).x;
 	vertex->at(5).normal[1] = n.at(5).y;
 	vertex->at(5).normal[2] = n.at(5).z;
-
+*/
 }
 
 // ##################################### 描画指定 ##################################### 	
 void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, glm::vec2 start, glm::vec2 end)
 {
+      shader->setEnable();
+	
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
 
 	startSize = start;	      //テクスチャ始点
 	endSize = end;		      //テクスチャ終点
@@ -214,22 +211,23 @@ void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, gl
 	setRotate(r);					//回転
 
 	//描画
-      shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-      shader->setDisable();
 
 	glActiveTexture(texture.at(textureNumber).unitNumber);	//テクスチャを有効にする
 	glBindTexture(GL_TEXTURE_2D, texture.at(textureNumber).ID);	//テクスチャをバインド
 	
 	glDrawArrays(GL_TRIANGLES, 0, vertex->size());
+	
 
 	//バインド解除
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+      shader->setDisable();
 
 }
 

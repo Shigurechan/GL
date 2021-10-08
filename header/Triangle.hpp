@@ -21,7 +21,7 @@ namespace FrameWork
 		Triangle();		//コンストラクタ
 		~Triangle();	//デストラクタ
 
-		void Draw(const glm::vec2 pos,const glm::vec2 size,GLfloat r);	// 描画		
+		void Draw(const glm::vec2 pos,const glm::vec2 size,const glm::ivec4 color,GLfloat r);	// 描画		
 
 
 	private:

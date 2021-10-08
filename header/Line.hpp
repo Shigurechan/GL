@@ -23,6 +23,7 @@ namespace FrameWork
 
 	private:
 
+		float rotate = 0;
 
 	};
 }
