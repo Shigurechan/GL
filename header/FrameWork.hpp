@@ -14,11 +14,4 @@
 #include "Resource.hpp"
 
 //図形
-#include "Line.hpp"
-#include "Circle.hpp"
-#include "Rectangle.hpp"
-#include "Triangle.hpp"
-#include "Ellipse.hpp"
-#include "Point.hpp"
-
 #endif

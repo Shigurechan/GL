@@ -7,19 +7,15 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-
 #include "Resource.hpp"
 
 /*#########################################################################
 # 簡易 描画関数
 ###########################################################################*/
-
 namespace FrameWork
 {
-	void DrawText(const char* font,glm::vec2 pos, FT_UInt charSize, glm::vec4 color,  const char* str, ...);	//文字
-
+	void DrawText(const char* font,glm::vec2 pos, FT_UInt charSize, glm::vec4 color,  const char* str, ...);			//文字
 	void DrawTexture(glm::vec2 pos, glm::vec2 sizeStart, glm::vec2 sizeEnd,glm::vec2 scale,GLfloat r,TextureFile data);	//テクスチャ描画
-
 	void DrawRectangle(glm::vec2 start,glm::vec2 end,GLdouble r,glm::vec4 color);								//矩形
 	void DrawCircle(glm::vec2 pos, unsigned short num, unsigned short width, GLdouble r, glm::vec4 color);			//円
 	void DrawPoint(glm::vec2 pos, GLfloat size, glm::vec4 color);										//点

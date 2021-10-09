@@ -19,10 +19,7 @@ obj/Main.o: source/Main.cpp source/../header/FrameWork.hpp \
  source/../header/VertexData.hpp source/../header/Render.hpp \
  source/../header/Shader.hpp source/../header/Transform_2D.hpp \
  source/../header/Actor.hpp source/../header/Text.hpp \
- source/../header/Init.hpp source/../header/Line.hpp \
- source/../header/Circle.hpp source/../header/Rectangle.hpp \
- source/../header/Triangle.hpp source/../header/Ellipse.hpp \
- source/../header/Point.hpp source/../header/Camera.hpp
+ source/../header/Init.hpp source/../header/Camera.hpp
 
 source/../header/FrameWork.hpp:
 
@@ -79,17 +76,5 @@ source/../header/Actor.hpp:
 source/../header/Text.hpp:
 
 source/../header/Init.hpp:
-
-source/../header/Line.hpp:
-
-source/../header/Circle.hpp:
-
-source/../header/Rectangle.hpp:
-
-source/../header/Triangle.hpp:
-
-source/../header/Ellipse.hpp:
-
-source/../header/Point.hpp:
 
 source/../header/Camera.hpp:

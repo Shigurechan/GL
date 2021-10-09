@@ -1,9 +1,9 @@
-obj/Ellipse.o: source/Ellipse.cpp source/../header/Ellipse.hpp \
+obj/Shape.o: source/Shape.cpp source/../header/Shape.hpp \
  source/../header/Render.hpp source/../header/Shader.hpp \
  source/../header/VertexData.hpp source/../header/Transform_2D.hpp \
- source/../header/VertexData.hpp source/../header/Init.hpp \
- source/../header/Window.hpp source/../header/Help.hpp \
- /usr/local/include/freetype2/ft2build.h \
+ source/../header/VertexData.hpp source/../header/Render.hpp \
+ source/../header/Camera.hpp source/../header/Actor.hpp \
+ source/../header/Resource.hpp /usr/local/include/freetype2/ft2build.h \
  /usr/local/include/freetype2/freetype/config/ftheader.h \
  /usr/local/include/freetype2/freetype/freetype.h \
  /usr/local/include/freetype2/freetype/config/ftconfig.h \
@@ -18,11 +18,11 @@ obj/Ellipse.o: source/Ellipse.cpp source/../header/Ellipse.hpp \
  /usr/local/include/freetype2/freetype/fterrors.h \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
- source/../header/Window.hpp source/../header/Shader.hpp \
- source/../header/Camera.hpp source/../header/Render.hpp \
- source/../header/Actor.hpp source/../header/Resource.hpp
+ source/../header/Help.hpp source/../header/Shader.hpp \
+ source/../header/Init.hpp source/../header/Window.hpp \
+ source/../header/Window.hpp
 
-source/../header/Ellipse.hpp:
+source/../header/Shape.hpp:
 
 source/../header/Render.hpp:
 
@@ -34,11 +34,13 @@ source/../header/Transform_2D.hpp:
 
 source/../header/VertexData.hpp:
 
-source/../header/Init.hpp:
+source/../header/Render.hpp:
 
-source/../header/Window.hpp:
+source/../header/Camera.hpp:
 
-source/../header/Help.hpp:
+source/../header/Actor.hpp:
+
+source/../header/Resource.hpp:
 
 /usr/local/include/freetype2/ft2build.h:
 
@@ -70,14 +72,12 @@ source/../header/Help.hpp:
 
 /usr/local/include/freetype2/freetype/fterrdef.h:
 
-source/../header/Window.hpp:
+source/../header/Help.hpp:
 
 source/../header/Shader.hpp:
 
-source/../header/Camera.hpp:
+source/../header/Init.hpp:
 
-source/../header/Render.hpp:
+source/../header/Window.hpp:
 
-source/../header/Actor.hpp:
-
-source/../header/Resource.hpp:
+source/../header/Window.hpp:
