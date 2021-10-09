@@ -15,13 +15,13 @@ namespace FrameWork
 {
 	class Window;
 
-	class Camera_2D
+	class Camera
 	{
 
 	public:
 
 		static void Init();	//初期化
-		~Camera_2D();		//デストラクタ
+		~Camera();		//デストラクタ
 
 
 		// ###################### 設定　関係 ###################### 
@@ -35,7 +35,7 @@ namespace FrameWork
 		static GLuint getVao();
 		static GLuint getVbo();
 
-		static std::shared_ptr<std::vector<FrameWork::VertexAttribute>> getVertexAttribute();	//頂点属性を取得
+		static std::shared_ptr<std::vector<FrameWork::D2::VertexAttribute>> getVertexAttribute();	//頂点属性を取得
 
 		//カメラ行列を取得
 		static glm::mat4 getViewProjection();		//3Dカメラ
@@ -48,10 +48,7 @@ namespace FrameWork
 
 	private:
 
-		static std::shared_ptr<std::vector<FrameWork::VertexAttribute>> vertex;	//頂点配列
-
-		static GLuint vao;	//vao
-		static GLuint vbo;	//vbo
+		static std::shared_ptr<std::vector<FrameWork::D2::VertexAttribute>> vertex;	//頂点配列
 
 		//描画行列
 		static glm::mat4 scale;		//拡大縮小
@@ -63,7 +60,7 @@ namespace FrameWork
 		static glm::mat4 view;		//ビュー行列
 		static glm::mat4 projection;	//透視射形行列
 
-		Camera_2D();	//コンストラクタ
+		Camera();	//コンストラクタ
 	};
 }
 #endif

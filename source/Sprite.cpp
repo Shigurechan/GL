@@ -12,31 +12,29 @@
 #include "../header/Window.hpp"
 #include "../header/Camera.hpp"
 
-// ##################################### コンストラクタ ##################################### 	
-FrameWork::Sprite::Sprite() : Render_2D()
+// ##################################### コンストラクタ #####################################
+FrameWork::D2::Sprite::Sprite() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicTexture_2D.frag")->data());
-	
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicTexture_D2.vert")->data(), FrameWork::LoadShader("Shader/D2/BasicTexture_D2.frag")->data());
 
-      //頂点	
-      GLint attrib = shader->getAttribLocation("vertexPosition");
-      glEnableVertexAttribArray(attrib);
-      glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-      glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
-      shader->setBindAttribLocation("vertexPosition");
+	vertex = FrameWork::Camera::getVertexAttribute();
 
+	//頂点
+	GLint attrib = shader->getAttribLocation("vertexPosition");
+	glEnableVertexAttribArray(attrib);
+	glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid *)0);
+	shader->setBindAttribLocation("vertexPosition");
 
-      //UV
-      attrib = shader->getAttribLocation("vertexUV");
-      glEnableVertexAttribArray(attrib);
-      glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-      glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 2));
-      shader->setBindAttribLocation("vertexUV");
+	//UV
+	attrib = shader->getAttribLocation("vertexUV");
+	glEnableVertexAttribArray(attrib);
+	glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * 2));
+	shader->setBindAttribLocation("vertexUV");
 
-
-/*
+	/*
       //Normal
       attrib = shader->getAttribLocation("vertexNormal");
       glEnableVertexAttribArray(attrib);
@@ -44,20 +42,19 @@ FrameWork::Sprite::Sprite() : Render_2D()
       glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 4));
       shader->setBindAttribLocation("vertexNormal");
 */
-
 }
 
-// ##################################### テクスチャ 設定 ##################################### 
-void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
+// ##################################### テクスチャ 設定 #####################################
+void FrameWork::D2::Sprite::InputTexture(FrameWork::TextureFile tex)
 {
 
-	glGenTextures(1, &textureID);			//テクスチャIDの生成
-	glBindTexture(GL_TEXTURE_2D, textureID);	//IDバインド
-	size = tex.size;	//サイズ
+	glGenTextures(1, &textureID);		     //テクスチャIDの生成
+	glBindTexture(GL_TEXTURE_2D, textureID); //IDバインド
+	size = tex.size;				     //サイズ
 
 	//テクスチャ生成
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size.x, tex.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.fileData);
-	
+
 	// テクスチャの補間設定
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -65,19 +62,16 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 }
 
+// ##################################### 頂点属性 #####################################
 
-// ##################################### 頂点属性 ##################################### 	
-
-void FrameWork::Sprite::setAttribute()
+void FrameWork::D2::Sprite::setAttribute()
 {
 
 	vertex->resize(6);
-	
+
 	// 頂点座標
 	vertex->at(0).position[0] = -0.5f;
 	vertex->at(0).position[1] = 0.5f;
@@ -119,7 +113,6 @@ void FrameWork::Sprite::setAttribute()
 
 	vertex->at(5).uv[0] = sizeX * endSize.x;
 	vertex->at(5).uv[1] = sizeY * startSize.y;
-
 }
 
 /*
@@ -154,48 +147,45 @@ void FrameWork::Sprite::setNormal(std::array<glm::vec3, 6> n)
 }
 */
 
-// ##################################### 描画指定 ##################################### 	
-void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, glm::vec2 start, glm::vec2 end)
+// ##################################### 描画指定 #####################################
+void FrameWork::D2::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, glm::vec2 start, glm::vec2 end)
 {
-      shader->setEnable();
-	
+	shader->setEnable();
+
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	startSize = start;	      //テクスチャ始点
-	endSize = end;		      //テクスチャ終点
-	setAttribute();		      //頂点属性　設定
+	startSize = start; //テクスチャ始点
+	endSize = end;	 //テクスチャ終点
+	setAttribute();	 //頂点属性　設定
 
-	glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexAttribute) * vertex->size(),vertex->data());
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 
 	//Transform
-	setPosition(pos);					//座標
-	setScale(s + glm::vec2(end - start));	//スケール
-	setRotate(r);					//回転
+	setPosition(pos);				  //座標
+	setScale(s + glm::vec2(end - start)); //スケール
+	setRotate(r);				  //回転
 
 	//描画
-	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
+	shader->setUniformMatrix4fv("uTranslate",getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
 
-	glActiveTexture(GL_TEXTURE0);			//テクスチャ有効
-	glBindTexture(GL_TEXTURE_2D, textureID);	//テクスチャバインド
-	
-	glDrawArrays(GL_TRIANGLES, 0, vertex->size());	//描画
-	
+	glActiveTexture(GL_TEXTURE0);		     //テクスチャ有効
+	glBindTexture(GL_TEXTURE_2D, textureID); //テクスチャバインド
+
+	glDrawArrays(GL_TRIANGLES, 0, vertex->size()); //描画
 
 	//バインド解除
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-      shader->setDisable();
-
+	shader->setDisable();
 }
 
-// ##################################### デストラクタ ##################################### 
-FrameWork::Sprite::~Sprite()
+// ##################################### デストラクタ #####################################
+FrameWork::D2::Sprite::~Sprite()
 {
-
 }

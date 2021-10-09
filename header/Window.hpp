@@ -23,8 +23,8 @@ namespace FrameWork
 
 	public:
 
-		Window(glm::ivec2 size = glm::ivec2(640,480), const char* title = "Hello!");	//コンストラクタ
-		~Window();												//デストラクタ
+		Window(glm::ivec2 size = glm::ivec2(640,480), const char* title = "FrameWork");	//コンストラクタ
+		~Window();													//デストラクタ
 
 		operator bool();			//bool 演算子
 		void SwapBuffers()const;	//ダブルバッファリング

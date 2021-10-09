@@ -1,14 +1,13 @@
 #include "../header/FrameWork.hpp"
 
 #include <iostream>
-#include "../header/FrameWork.hpp"
 #include "../header/Camera.hpp"
 
 
 int main()
 {
 	FrameWork::Init(glm::ivec2(48 * 26, 48 * 18), glm::ivec2(4,2), "FrameWork");	//　初期化
-	FrameWork::Camera_2D::Init();	//カメラ初期化
+	FrameWork::Camera::Init();	//カメラ初期化
 
 
 	float f = 0;

@@ -1,22 +1,23 @@
 #ifndef ACTOR_HPP_
 #define ACTOR_HPP_
 
-#include <iostream>
-#include "Render.hpp"
-#include "VertexData.hpp"
 
 namespace FrameWork
 {
-	class Actor
+	namespace D2
 	{
-	public:
-		Actor()
+		class Actor
 		{
+		public:
 
-		}
-		
-		virtual void Update() = 0;		//更新
-		virtual void Draw()const = 0;		//描画
-	};
+			Actor()
+			{
+
+			}
+			
+			virtual void Update() = 0;		//更新
+			virtual void Draw()const = 0;		//描画
+		};		
+	}
 }
 #endif

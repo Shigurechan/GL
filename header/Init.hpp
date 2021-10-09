@@ -10,9 +10,8 @@
 
 namespace FrameWork
 {
-	extern std::shared_ptr<FrameWork::Window> windowContext;	//ウインドウコンテキスト
-
-
+	extern std::shared_ptr<FrameWork::Window> windowContext;		//ウインドウコンテキスト
 	bool Init(glm::ivec2 size, glm::ivec2 ver, const char* title);	//初期化
+	
 }
 #endif

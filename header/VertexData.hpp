@@ -10,17 +10,18 @@
 
 #include <GL/glew.h>
 
-namespace FrameWork
+namespace FrameWork 
 {
-	
-	
-	typedef struct
+	namespace D2
 	{
-		GLfloat position[2];
-		GLfloat uv[2];
-		GLfloat normal[3];
-		GLfloat color[4];
-	}VertexAttribute;
+		typedef struct vertex_attribute
+		{
+			GLfloat position[2];
+			GLfloat uv[2];
+			GLfloat normal[3];
+			GLfloat color[4];
+		}VertexAttribute;
+	}
 }
 #endif
 

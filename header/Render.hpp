@@ -11,26 +11,30 @@
 
 #include "Shader.hpp"
 #include "VertexData.hpp"
-#include "Transform_2D.hpp"
+#include "Transform.hpp"
 
 namespace FrameWork
 {
-	class Render_2D : public Transform_2D
+	namespace D2
 	{
-	public:
-		
-		Render_2D();	//コンストラクタ
-		~Render_2D();	//デストラクタ
+		class Render : public FrameWork::D2::Transform
+		{
+			public:
+				
+				Render();	//コンストラクタ
+				~Render();	//デストラクタ
 
-		std::shared_ptr<FrameWork::Shader> shader;	//シェーダー
+				std::shared_ptr<FrameWork::Shader> shader;	//シェーダー
 
-	protected:
-		
-		std::shared_ptr<std::vector<VertexAttribute>> vertex;	//頂点情報
+			protected:
+				
+				std::shared_ptr<std::vector<VertexAttribute>> vertex;	//頂点情報
 
-		GLuint vao;	//VertexArrayObject
-		GLuint vbo;	//VertexBufferObject	
-	};
-};
+				GLuint vao;	//VertexArrayObject
+				GLuint vbo;	//VertexBufferObject	
+			
+		};
+	}
+}
 
 #endif

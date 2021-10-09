@@ -9,7 +9,8 @@
 
 namespace FrameWork
 {
-    // ##################################### 乱数を取得 ##################################### 
+	
+	// ##################################### 乱数を取得 ##################################### 
 	int GetRandom(int start, int end)
 	{
 		std::random_device rnd;                             // 非決定的な乱数生成器を生成
@@ -39,5 +40,6 @@ namespace FrameWork
 		float c = 1.0f / 255.0f;
 		return glm::vec4(rgb.x * c,rgb.y * c,rgb.z * c,rgb.w);
 	}
+		
 
 }

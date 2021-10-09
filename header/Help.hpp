@@ -25,6 +25,6 @@ namespace FrameWork
 	float GetAngle(float r);				//ラジアンから度数を取得
 	glm::vec4 GetGlColor(const glm::vec4 rgb);	//0~1までの値を取得
 	glm::vec2 GetWindowCenter();				//ウインドウの中心座標を取得
-
+	
 }
 #endif

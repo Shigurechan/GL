@@ -1,10 +1,10 @@
-#include "../header/Transform_2D.hpp"
+#include "../header/Transform.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Transform_2D::Transform_2D()
+FrameWork::D2::Transform::Transform()
 {
 	position = glm::vec2(0, 0);	//座標
 	scale = glm::vec2(1, 1);	//スケール
@@ -19,20 +19,20 @@ FrameWork::Transform_2D::Transform_2D()
 /* ############################################################### 設定 ###############################################################  */
 
 // ##################################### 座標　設定 ##################################### 
-void FrameWork::Transform_2D::setPosition(glm::vec2 p)
+void FrameWork::D2::Transform::setPosition(glm::vec2 p)
 {
 	position = p;
 	matTranslation = glm::translate(glm::mat4(1), glm::vec3(p.x, p.y, 0));
 }
 
 // ##################################### スケール　設定 ##################################### 
-void FrameWork::Transform_2D::setScale(glm::vec2 s)
+void FrameWork::D2::Transform::setScale(glm::vec2 s)
 {
 	matScale = glm::scale(glm::mat4(1), glm::vec3(s.x, s.y, 0.0f));
 }
 
 // ##################################### 回転　設定 ##################################### 
-void FrameWork::Transform_2D::setRotate(float r)
+void FrameWork::D2::Transform::setRotate(float r)
 {
 	rotate = r;
 	matRotate = glm::rotate(glm::mat4(1), r, glm::vec3(0.0, 0.0, 1.0));	//回転	
@@ -41,19 +41,19 @@ void FrameWork::Transform_2D::setRotate(float r)
 /* ############################################################### 取得 ###############################################################  */
 
 // ##################################### 座標　取得 ##################################### 
-glm::vec2 FrameWork::Transform_2D::getPosition()
+glm::vec2 FrameWork::D2::Transform::getPosition()
 {
 	return position;
 }
 
 // ##################################### スケール　取得 ##################################### 
-glm::vec2 FrameWork::Transform_2D::getScale()
+glm::vec2 FrameWork::D2::Transform::getScale()
 {
 	return scale;
 }
 
 // ##################################### 回転　取得 ##################################### 
-float FrameWork::Transform_2D::getRotate()
+float FrameWork::D2::Transform::getRotate()
 {
 	return rotate;
 }
@@ -61,25 +61,25 @@ float FrameWork::Transform_2D::getRotate()
 /* ############################################################### 行列　取得 ###############################################################  */
 
 // ##################################### 平行移動　行列　取得 ##################################### 
-glm::mat4 FrameWork::Transform_2D::getMatTranslation()
+glm::mat4 FrameWork::D2::Transform::getMatTranslation()
 {
 	return matTranslation;
 }
 
 // ##################################### スケール　行列　取得 ##################################### 
-glm::mat4 FrameWork::Transform_2D::getMatScale()
+glm::mat4 FrameWork::D2::Transform::getMatScale()
 {
 	return matScale;
 }
 
 // ##################################### 回転　行列　取得 ##################################### 
-glm::mat4 FrameWork::Transform_2D::getMatRotate()
+glm::mat4 FrameWork::D2::Transform::getMatRotate()
 {
 	return matRotate;
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Transform_2D::~Transform_2D()
+FrameWork::D2::Transform::~Transform()
 {
 
 }

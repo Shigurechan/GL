@@ -6,7 +6,7 @@
 
 // ##################################### コンストラクタ #####################################
 //頂点属性、レンダリングタイプ、頂点数
-FrameWork::Render_2D::Render_2D()
+FrameWork::D2::Render::Render()
 {
 	shader = std::make_shared<FrameWork::Shader>();	//シェーダー
 	
@@ -20,7 +20,7 @@ FrameWork::Render_2D::Render_2D()
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Render_2D::~Render_2D()
+FrameWork::D2::Render::~Render()
 {
 
 }

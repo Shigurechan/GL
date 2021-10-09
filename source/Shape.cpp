@@ -15,14 +15,14 @@
 #  円
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Circle::Circle() : Render_2D()
+FrameWork::D2::Circle::Circle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	vertex = FrameWork::Camera::getVertexAttribute();
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GLushort num, const GLushort w, const GLfloat r)
+void FrameWork::D2::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GLushort num, const GLushort w, const GLfloat r)
 {	
 
 	glBindVertexArray(vao);
@@ -37,19 +37,7 @@ void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GL
 		glEnableVertexAttribArray(attrib);
 		glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
 		glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat),(GLvoid*)0);
-		shader->setBindAttribLocation("vertexPosition");
 	}
-
-	float n = (PI * 2.0f) / (float)vertex->size();
-	float t = 0.0f;
-	for (int i = 0; i < vertex->size(); i++)
-	{
-		vertex->at(i).position[0] = cos(t) * w;
-		vertex->at(i).position[1] = sin(t) * w;
-
-		t += n;
-	}
-
 	//Transform
 	setPosition(pos);			//座標
 	setScale(glm::vec2(1, 1));	//スケール
@@ -71,7 +59,7 @@ void FrameWork::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GL
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Circle::~Circle()
+FrameWork::D2::Circle::~Circle()
 {
 	
 }
@@ -80,12 +68,12 @@ FrameWork::Circle::~Circle()
 #  点
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Point::Point() : Render_2D()
+FrameWork::D2::Point::Point() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
 	
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	vertex = FrameWork::Camera::getVertexAttribute();
 
 	//頂点	
 	GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -96,7 +84,7 @@ FrameWork::Point::Point() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Point::Draw(glm::vec2 p,glm::vec4 color,unsigned short s)
+void FrameWork::D2::Point::Draw(glm::vec2 p,glm::vec4 color,unsigned short s)
 {
 
 	glBindVertexArray(vao);
@@ -129,7 +117,7 @@ void FrameWork::Point::Draw(glm::vec2 p,glm::vec4 color,unsigned short s)
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Point::~Point()
+FrameWork::D2::Point::~Point()
 {
 	
 }
@@ -138,11 +126,11 @@ FrameWork::Point::~Point()
 #  線
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Line::Line() : Render_2D()
+FrameWork::D2::Line::Line() : Render()
 {	
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
 
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(2);
 
 	//頂点	
@@ -155,7 +143,7 @@ FrameWork::Line::Line() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsigned short width, float r)
+void FrameWork::D2::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsigned short width, float r)
 {
 
 	glBindVertexArray(vao);
@@ -220,7 +208,7 @@ void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsign
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Line::~Line()
+FrameWork::D2::Line::~Line()
 {
 	
 }
@@ -229,11 +217,11 @@ FrameWork::Line::~Line()
 #  三角形
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Triangle::Triangle() : Render_2D()
+FrameWork::D2::Triangle::Triangle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
 
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(3);
 
 	//頂点	
@@ -245,7 +233,7 @@ FrameWork::Triangle::Triangle() : Render_2D()
 }
 
 // ##################################### 描画 設定 ##################################### 
-void FrameWork::Triangle::Draw(const glm::vec2 pos,const glm::vec2 s,const glm::ivec4 color,GLfloat r)
+void FrameWork::D2::Triangle::Draw(const glm::vec2 pos,const glm::vec2 s,const glm::ivec4 color,GLfloat r)
 {
 
 	glBindVertexArray(vao);
@@ -283,7 +271,7 @@ void FrameWork::Triangle::Draw(const glm::vec2 pos,const glm::vec2 s,const glm::
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Triangle::~Triangle()
+FrameWork::D2::Triangle::~Triangle()
 {
 	
 }
@@ -292,11 +280,11 @@ FrameWork::Triangle::~Triangle()
 #  矩形
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Rectangle::Rectangle() : Render_2D()
+FrameWork::D2::Rectangle::Rectangle() : Render()
 {		
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
 	
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(6);
 
 	//頂点	
@@ -309,7 +297,7 @@ FrameWork::Rectangle::Rectangle() : Render_2D()
 }
 
 // ##################################### 描画 ##################################### 
-void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,float r)
+void FrameWork::D2::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,float r)
 {
 
 	glBindVertexArray(vao);
@@ -358,7 +346,7 @@ void FrameWork::Rectangle::Draw(glm::vec2 start,glm::vec2 end,glm::vec4 color,fl
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Rectangle::~Rectangle()
+FrameWork::D2::Rectangle::~Rectangle()
 {
 	
 }
@@ -367,17 +355,17 @@ FrameWork::Rectangle::~Rectangle()
 #  楕円
 ########################################################################################################################################*/
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Ellipse::Ellipse() : Render_2D()
+FrameWork::D2::Ellipse::Ellipse() : Render()
 {	
 	
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
 
 	vertNum = 0; //頂点数
-	vertex = FrameWork::Camera_2D::getVertexAttribute();
+	vertex = FrameWork::Camera::getVertexAttribute();
 	
 }
 // ##################################### 描画　設定 ##################################### 
-void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int num,float r)
+void FrameWork::D2::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int num,float r)
 {
 	shader->setEnable();
 
@@ -428,7 +416,7 @@ void FrameWork::Ellipse::Draw(glm::vec2 pos, glm::vec4 color,glm::vec2 s, int nu
 }
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Ellipse::~Ellipse()
+FrameWork::D2::Ellipse::~Ellipse()
 {
 	
 }

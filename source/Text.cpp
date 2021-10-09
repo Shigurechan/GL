@@ -22,33 +22,33 @@
 
 
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Text::Text() : FrameWork::Render_2D()
+FrameWork::D2::Text::Text() : FrameWork::D2::Render()
 {
 
     //シェーダー読み込み
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
 
-    vertex = FrameWork::Camera_2D::getVertexAttribute();
+    vertex = FrameWork::Camera::getVertexAttribute();
     text.clear();
 
     //頂点	
     GLint attrib = shader->getAttribLocation("vertexPosition");
     glEnableVertexAttribArray(attrib);
-    glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(FrameWork::D2::VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
     glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
     shader->setBindAttribLocation("vertexPosition");
 
     //UV
     attrib = shader->getAttribLocation("vertexUV");
     glEnableVertexAttribArray(attrib);
-    glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(FrameWork::D2::VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
     glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 2));
     shader->setBindAttribLocation("vertexUV");
     
 }
 
 // ##################################### wchar_t型の文字列を取得 ##################################### 
-std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
+std::vector<wchar_t> FrameWork::D2::Text::getWchar_t(const char* str)
 {
     std::vector<wchar_t> newText(0);
 
@@ -66,12 +66,12 @@ std::vector<wchar_t> FrameWork::Text::getWchar_t(const char* str)
 }
 
 // ##################################### 固定長文字列　描画 ##################################### 
-void FrameWork::Text::DrawString(glm::vec2 pos)
+void FrameWork::D2::Text::DrawString(glm::vec2 pos)
 {
     RenderString(pos);
 }
 
-void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
+void FrameWork::D2::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
 {
     text.clear();
 
@@ -87,7 +87,7 @@ void FrameWork::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 co
 
 
 // ##################################### テクスチャ　設定 ##################################### 
-void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
+void FrameWork::D2::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
 {
     text.clear();
     FT_Face face = LoadFont("Font/PressStart2P.ttf");
@@ -151,7 +151,7 @@ void FrameWork::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Cha
 
 
 // ##################################### 文字列を描画 ##################################### 
-void FrameWork::Text::RenderString(glm::vec2 pos)
+void FrameWork::D2::Text::RenderString(glm::vec2 pos)
 {
     if (text.size() > 0)
     {     
@@ -210,9 +210,9 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBindTexture(GL_TEXTURE_2D, itr->textureID);
 
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(VertexAttribute), vertex->data());
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(FrameWork::D2::VertexAttribute), vertex->data());
 
-            shader->setUniform4f("uFragment", GetGlColor((glm::vec4)itr->color));
+            shader->setUniform4f("uFragment", FrameWork::GetGlColor((glm::vec4)itr->color));
             shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
 
             glDrawArrays(GL_TRIANGLES, 0, vertex->size());
@@ -236,7 +236,7 @@ void FrameWork::Text::RenderString(glm::vec2 pos)
 
 
 // ##################################### デストラクタ ##################################### 
-FrameWork::Text::~Text()
+FrameWork::D2::Text::~Text()
 {
         
 }
