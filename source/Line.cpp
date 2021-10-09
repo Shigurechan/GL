@@ -37,33 +37,37 @@ void FrameWork::Line::Draw(glm::vec2 start, glm::vec2 end,glm::vec4 color,unsign
 	glm::vec2 center = glm::vec2(end.x + start.x,end.y + start.y) / 2.0f;
 
 
+	vertex->at(0).position[0] = start.x;
+	vertex->at(0).position[1] = start.y;			
+	
+	vertex->at(1).position[0] = end.x;
+	vertex->at(1).position[1] = end.y;			
+
+
 	vertex->at(0).position[0] += -center.x;
 	vertex->at(0).position[1] += -center.y;			
 	
 	vertex->at(1).position[0] += -center.x;
-	vertex->at(1).position[1] += -center.y;			
+	vertex->at(1).position[1] += -center.y;
 
- // let xx = (cos(PI / 2 * this.rotate) * (x - 1.5)) + (-sin(PI / 2 * this.rotate) * (y - 1.5) );
-//let yy = (sin(PI / 2 * this.rotate) * (x - 1.5)) + (cos(PI / 2 * this.rotate) * (y - 1.5) );
+	glm::vec2 st;
+	glm::vec2 en;
+	st.x = (cos(r) * (vertex->at(0).position[0])) + (-sin(r) * (vertex->at(0).position[1]));
+	st.y = (sin(r) * (vertex->at(0).position[0])) + (cos(r) * (vertex->at(0).position[1]));
 
-	vertex->at(0).position[0] = (cos(r) * (vertex->at(0).position[0])) + (-sin(r) * (vertex->at(0).position[1]));
-	vertex->at(0).position[1] = (sin(r) * (vertex->at(0).position[0])) + (cos(r) * (vertex->at(0).position[1]));
-
-	vertex->at(1).position[0] = (cos(r) * (vertex->at(1).position[0])) + (-sin(r) * (vertex->at(1).position[1]));
-	vertex->at(1).position[1] = (sin(r) * (vertex->at(1).position[0])) + (cos(r) * (vertex->at(1).position[1]));
+	en.x = (cos(r) * (vertex->at(1).position[0])) + (-sin(r) * (vertex->at(1).position[1]));
+	en.y = (sin(r) * (vertex->at(1).position[0])) + (cos(r) * (vertex->at(1).position[1]));
 
 
-	vertex->at(0).position[0] += center.x;
-	vertex->at(0).position[1] += center.y;			
+	vertex->at(0).position[0] = st.x + center.x;
+	vertex->at(0).position[1] = st.y + center.y;			
 
-	vertex->at(1).position[0] += center.x;
-	vertex->at(1).position[1] += center.y;			
+	vertex->at(1).position[0] = en.x + center.x;
+	vertex->at(1).position[1] = en.y + center.y;			
 
-	printf("%f\n",vertex->at(1).position[1]);
 
 
 	//Transform
-
 	setPosition(glm::vec2(0,0));	//座標
 	setScale(glm::vec2(1,1));	//スケール
 	setRotate(0);			//回転
