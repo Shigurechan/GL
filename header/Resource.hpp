@@ -36,8 +36,10 @@ namespace FrameWork
 
 
 
+
       TextureFile LoadTexture(const char* fileName);
       std::shared_ptr<std::vector<GLchar>> LoadShader(const char* fileName);
+      std::vector<TextureFile> LoadTextureSize(glm::ivec2 fileSize,glm::ivec2 imageSize,glm::ivec2 num,const char* fileName);
       SoundFile LoadSound(const char* fileName);
       FT_Face LoadFont(const char* fileName);
 

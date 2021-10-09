@@ -341,9 +341,7 @@ namespace FrameWork
         {
             FrameWork::Shader shader;
 
-            //shader.Load("Shader/2D/BasicText_2D.vert", "Shader/2D/BasicText_2D.frag");    //シェーダー読み込み
-            //shader.Input(FrameWork::Resource::getShader(FrameWork::Resource::Asset::shader_BasicMono_vert), FrameWork::Resource::getShader(FrameWork::Resource::Asset::shader_BasicMono_frag));
-
+	        shader.Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
             GLuint vao; //vao
             GLuint vbo; //vbo
 

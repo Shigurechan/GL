@@ -17,13 +17,8 @@ FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
 {
 
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicTexture_2D.frag")->data());
-
-
-
 	
 	vertex = FrameWork::Camera_2D::getVertexAttribute();
-
-	//printf("%d",vertex->size());
 
       //頂点	
       GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -48,7 +43,6 @@ FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
       glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
       glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat) * 4));
       shader->setBindAttribLocation("vertexNormal");
-	printf("ddddddddd\n");
 */
 
 	texture.clear();	//テクスチャデータ
@@ -61,11 +55,6 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 	Texture data;
 	data.size = tex.size;
 	data.data = tex.fileData;
-
-//	printf("data.size.x %f\n",data.size.x);
-//	printf("data.size.y %f\n\n",data.size.y);
-//	printf("data.data %d\n\n",data.data);
-
 
 	texture.push_back(data);	//テクスチャーIDに追加	
 
@@ -88,12 +77,6 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 
 	//テクスチャユニットを設定できない場合はエラー
 	assert(texture.back().unitNumber < GL_TEXTURE31);
-
-
-
-
-//	printf("data.size.x %f\n",texture.back().size.x);
-//	printf("data.size.y %f\n\n",texture.back().size.y);
 
 	textureUnitCount++;	//テクスチャーユニットカウントに加算
 }
@@ -125,19 +108,10 @@ void FrameWork::Sprite::setAttribute()
 	vertex->at(5).position[0] = 0.5f;
 	vertex->at(5).position[1] = -0.5f;
 
-	
-//	printf("texture.at(textureNumber).size.x %f\n",texture.at(textureNumber).size.x);
-	//printf("texture.at(textureNumber).size.y %f\n\n",texture.at(textureNumber).size.y);
-
-
 	//UV座標
 	float sizeX = 1.0f / (float)texture.at(textureNumber).size.x;
 	float sizeY = 1.0f / (float)texture.at(textureNumber).size.y;
-
-	//printf("sizeX %f\n",sizeX);
-	//printf("sizeY %f\n\n",sizeY);
-
-
+	
 	vertex->at(0).uv[0] = sizeX * startSize.x;
 	vertex->at(0).uv[1] = sizeY * endSize.y;
 
