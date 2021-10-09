@@ -39,38 +39,24 @@ namespace FrameWork
 
 	public:
 
-		Sprite(const char* vert = NULL, const char* frag = NULL);	//コンストラクタ
-		~Sprite();							            //デストラクタ																							//　デストラクタ
+		Sprite();	//コンストラクタ
+		~Sprite();	//デストラクタ
 
 		void InputTexture(FrameWork::TextureFile tex);  //テクスチャ 設定
-            void setAttribute();					//頂点情報　設定
-		void setNormal(std::array<glm::vec3, 6> n);     //法線　設定
 		
-		void setUnBind();	//バインド 無効
-		void setBind();	//バインド 有効
 		void Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, glm::vec2 start, glm::vec2 end);	//　描画　設定
 
 	private:
+            void setAttribute();	//頂点情報　設定
 
-		//テクスチャ
-		typedef struct
-		{
-			glm::vec2 size;   //画像サイズ
-			int unitNumber;   //ユニットナンバー
-			GLuint ID;		//ID
-			byte *data;	      //テクスチャ
-		}Texture;
-
+		
 		//テクスチャ範囲
 		glm::vec2 startSize;	//始点
 		glm::vec2 endSize;	//終点
+		glm::ivec2 size;		//サイズ
 
-	
-
-		std::vector<Texture> texture;	//テクスチャデータ
-		int textureNumber = 0;		//描画テクスチャナンバー
-		int textureUnitCount = 0;	//テクスチャーユニットカウントに加算
-
+		GLuint textureID;	//テクスチャID
+		
 	};
 }
 #endif

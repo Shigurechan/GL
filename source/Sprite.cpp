@@ -13,7 +13,7 @@
 #include "../header/Camera.hpp"
 
 // ##################################### コンストラクタ ##################################### 	
-FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
+FrameWork::Sprite::Sprite() : Render_2D()
 {
 
 	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicTexture_2D.frag")->data());
@@ -45,26 +45,18 @@ FrameWork::Sprite::Sprite(const char* vert, const char* frag) : Render_2D()
       shader->setBindAttribLocation("vertexNormal");
 */
 
-	texture.clear();	//テクスチャデータ
 }
 
 // ##################################### テクスチャ 設定 ##################################### 
 void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 {
 
-	Texture data;
-	data.size = tex.size;
-	data.data = tex.fileData;
-
-	texture.push_back(data);	//テクスチャーIDに追加	
-
-
-	glGenTextures(1, &texture.back().ID);			//テクスチャIDの生成
-	glBindTexture(GL_TEXTURE_2D, texture.back().ID);	//IDをバインド
-
+	glGenTextures(1, &textureID);			//テクスチャIDの生成
+	glBindTexture(GL_TEXTURE_2D, textureID);	//IDバインド
+	size = tex.size;	//サイズ
 
 	//テクスチャ生成
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.back().size.x, texture.back().size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.back().data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size.x, tex.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.fileData);
 	
 	// テクスチャの補間設定
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -73,12 +65,9 @@ void FrameWork::Sprite::InputTexture(FrameWork::TextureFile tex)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	texture.back().unitNumber = GL_TEXTURE0 + (int)textureUnitCount;
 
-	//テクスチャユニットを設定できない場合はエラー
-	assert(texture.back().unitNumber < GL_TEXTURE31);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-	textureUnitCount++;	//テクスチャーユニットカウントに加算
 }
 
 
@@ -109,9 +98,9 @@ void FrameWork::Sprite::setAttribute()
 	vertex->at(5).position[1] = -0.5f;
 
 	//UV座標
-	float sizeX = 1.0f / (float)texture.at(textureNumber).size.x;
-	float sizeY = 1.0f / (float)texture.at(textureNumber).size.y;
-	
+	float sizeX = 1.0f / (float)size.x;
+	float sizeY = 1.0f / (float)size.y;
+
 	vertex->at(0).uv[0] = sizeX * startSize.x;
 	vertex->at(0).uv[1] = sizeY * endSize.y;
 
@@ -133,11 +122,11 @@ void FrameWork::Sprite::setAttribute()
 
 }
 
-
+/*
 // ##################################### 法線　設定 ##################################### 	
 void FrameWork::Sprite::setNormal(std::array<glm::vec3, 6> n)
 {
-/*
+
 	vertex->at(0).normal[0] = n.at(0).x;
 	vertex->at(0).normal[1] = n.at(0).y;
 	vertex->at(0).normal[2] = n.at(0).z;
@@ -161,8 +150,9 @@ void FrameWork::Sprite::setNormal(std::array<glm::vec3, 6> n)
 	vertex->at(5).normal[0] = n.at(5).x;
 	vertex->at(5).normal[1] = n.at(5).y;
 	vertex->at(5).normal[2] = n.at(5).z;
-*/
+
 }
+*/
 
 // ##################################### 描画指定 ##################################### 	
 void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, glm::vec2 start, glm::vec2 end)
@@ -174,7 +164,6 @@ void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, gl
 
 	startSize = start;	      //テクスチャ始点
 	endSize = end;		      //テクスチャ終点
-      textureNumber = texNum;	      //テクスチャ指定
 	setAttribute();		      //頂点属性　設定
 
 	glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(VertexAttribute) * vertex->size(),vertex->data());
@@ -190,10 +179,10 @@ void FrameWork::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s, gl
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
 
-	glActiveTexture(texture.at(textureNumber).unitNumber);	//テクスチャを有効にする
-	glBindTexture(GL_TEXTURE_2D, texture.at(textureNumber).ID);	//テクスチャをバインド
+	glActiveTexture(GL_TEXTURE0);			//テクスチャ有効
+	glBindTexture(GL_TEXTURE_2D, textureID);	//テクスチャバインド
 	
-	glDrawArrays(GL_TRIANGLES, 0, vertex->size());
+	glDrawArrays(GL_TRIANGLES, 0, vertex->size());	//描画
 	
 
 	//バインド解除
