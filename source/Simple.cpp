@@ -1,4 +1,4 @@
-#include "../header/Simple_Draw.hpp"
+#include "../header/Simple.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

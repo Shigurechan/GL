@@ -66,12 +66,13 @@ std::vector<wchar_t> FrameWork::D2::Text::getWchar_t(const char* str)
 }
 
 // ##################################### 固定長文字列　描画 ##################################### 
-void FrameWork::D2::Text::DrawString(glm::vec2 pos)
+void FrameWork::D2::Text::Draw(glm::vec2 pos)
 {
     RenderString(pos);
 }
 
-void FrameWork::D2::Text::setString( const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...)
+// ##################################### 描画文字 設定 ##################################### 
+void FrameWork::D2::Text::setString( const byte ps, const glm::lowp_u8vec4 c, const char* args,...)
 {
     text.clear();
 
@@ -81,13 +82,16 @@ void FrameWork::D2::Text::setString( const byte pixelSize, const glm::lowp_u8vec
     va_start(va,args);
     vsprintf(buf,args,va);
     va_end(va);
+
+    color = c;      //色
+    pixelSize = ps; //ピクセルサイズ
     std::vector<wchar_t> wc = getWchar_t(buf);  //wchar_t型　取得
-    setTexture(wc,text,color,pixelSize);        //テクスチャ　設定
+    setTexture(wc,text);                        //テクスチャ　設定
 }
 
 
 // ##################################### テクスチャ　設定 ##################################### 
-void FrameWork::D2::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize)
+void FrameWork::D2::Text::setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text)
 {
     text.clear();
     FT_Face face = LoadFont("Font/PressStart2P.ttf");
@@ -118,8 +122,6 @@ void FrameWork::D2::Text::setTexture(const std::vector<wchar_t>& wc, std::vector
             glm::lowp_u8vec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             (unsigned short)face->glyph->advance.x,
             *itr,
-            color,
-            pixelSize
         };
 
         glGenTextures(1, &ch.textureID);
@@ -161,7 +163,7 @@ void FrameWork::D2::Text::RenderString(glm::vec2 pos)
         for (std::vector<Character>::const_iterator itr = text.begin(); itr->character != L'\0'; itr++)
         {
 
-            pos.y = FrameWork::windowContext->getSize().y - y - itr->pixelSize;
+            pos.y = FrameWork::windowContext->getSize().y - y - pixelSize;
 
 #define SCALE 1.0f  //文字の大きさ
 
@@ -212,7 +214,7 @@ void FrameWork::D2::Text::RenderString(glm::vec2 pos)
 
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertex->size() * sizeof(FrameWork::D2::VertexAttribute), vertex->data());
 
-            shader->setUniform4f("uFragment", FrameWork::GetGlColor((glm::vec4)itr->color));
+            shader->setUniform4f("uFragment", FrameWork::GetGlColor(color));
             shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
 
             glDrawArrays(GL_TRIANGLES, 0, vertex->size());

@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "Shape.hpp"
-#include "Simple_Draw.hpp"
+#include "Simple.hpp"
 #include "Text.hpp"
 #include "Help.hpp"
 #include "Init.hpp"

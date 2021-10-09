@@ -18,12 +18,10 @@ glm::vec3 FrameWork::Camera::vecLook = glm::vec3(0,0,-1);	//向き(視線)
 glm::mat4 FrameWork::Camera::view = glm::lookAt(glm::vec3(vecPosition.x, vecPosition.y, 0.0f), vecLook, glm::vec3(0, 1, 0));	//ビュー行列
 glm::mat4 FrameWork::Camera::projection = glm::perspective(glm::radians(90.0f), 4.0f / 3.0f, 0.1f, 100.0f);				//透視射形行列
 
-
 // ##################################### 初期化　##################################### 
 void FrameWork::Camera::Init()
 {
-
-	vertex->resize(6);
+	vertex->resize(6);	//頂点配列を初期化
 }
 
 // ##################################### 頂点属性を取得　##################################### 
@@ -51,6 +49,7 @@ glm::vec2 FrameWork::Camera::getPosition()
 {
 	return vecPosition;
 }
+
 // #####################################　視線を取得 ##################################### 
 glm::vec3 FrameWork::Camera::getLook()
 {

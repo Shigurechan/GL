@@ -37,9 +37,6 @@ namespace FrameWork
                 glm::lowp_u8vec2   bearing; // グリフのベースライン
                 unsigned short advance;     // 次のグリフまでのオフセット
                 wchar_t character;          // 文字
-                glm::lowp_u8vec4 color;     // 描画色
-                byte pixelSize;             // ピクセルサイズ
-
             }Character;
 
         public:
@@ -47,18 +44,19 @@ namespace FrameWork
             Text();   //コンストラクタ
             ~Text();  //デストラクタ
         
-            void setString(const byte pixelSize, const glm::lowp_u8vec4 color, const char* args,...);
-            void DrawString(glm::vec2 pos);
+            void setString(const byte ps,const glm::lowp_u8vec4 c,const char* args,...);
+            void Draw(glm::vec2 pos);
 
         private:
 
             std::vector<wchar_t> getWchar_t(const char* str);
-            void setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text, const glm::lowp_u8vec4 color, const byte pixelSize);
+            void setTexture(const std::vector<wchar_t>& wc, std::vector<Character>& text);
             void RenderString(glm::vec2 pos);        
 
             std::vector<Character> text;
-
-
+            glm::lowp_u8vec4 color; //色
+            byte pixelSize;         //ピクセルサイズ
+    
         };
         
     }

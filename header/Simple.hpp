@@ -1,5 +1,6 @@
-#ifndef ___SIMPLE_DRAW_HPP_
-#define ___SIMPLE_DRAW_HPP_
+#ifndef ___SIMPLE_HPP_
+#define ___SIMPLE_HPP_
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <iostream>
@@ -14,7 +15,6 @@
 ###########################################################################*/
 namespace FrameWork
 {
-
 	namespace D2
 	{
 		void DrawText(const char* font,glm::vec2 pos, FT_UInt charSize, glm::vec4 color,  const char* str, ...);			//文字
@@ -26,9 +26,6 @@ namespace FrameWork
 		void DrawTriangle(glm::vec2 pos, glm::vec2 size, GLdouble r, glm::vec4 color);							//三角形
 		void DrawEllipse(glm::vec2 pos,glm::vec2 size, unsigned short num, GLdouble r, glm::vec4 color);				//楕円
 		glm::vec2 getWindowPosition(glm::vec2 pos);	//スクリーン座標を取得
-
 	}
-
-
 }
 #endif

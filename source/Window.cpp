@@ -189,7 +189,7 @@ int FrameWork::Window::getNowTime()
 void FrameWork::Window::FrameUpdate(glm::vec4 color)
 {
 	float c = 1.0f / 255.0f;
-	glClearColor(color.x * c, color.y * c, color.z * c, color.w * c);									//カラーバッファのクリア色
+	glClearColor(color.x * c, color.y * c, color.z * c, color.w * c);							//カラーバッファのクリア色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);	//フレームバッファを初期化
 
 	glEnable(GL_BLEND);	//アルファブレンド有効
@@ -223,18 +223,6 @@ void FrameWork::Window::Wait()
 {
 	int tookTime = getNowTime() - startCount;	
 	int waitTime = count * 1000 / FRAME_RATE - tookTime;
-
-	//std::cout << "waitTime: " << waitTime << std::endl;
-
-	/*
-	std::cout << "tookTime: " << tookTime << std::endl;
-	std::cout << "waitTime: " << waitTime << std::endl;
-	std::cout << "count: " << count << std::endl;
-	std::cout << "getNowTime(): " << getNowTime() << std::endl;
-	std::cout << "((int)(count * 1000) / FRAME_RATE): " << ((int)(count * 1000) / FRAME_RATE) << std::endl;
-	std::cout << std::endl;
-	*/
-	
 
 	if (waitTime > 0)
 	{
