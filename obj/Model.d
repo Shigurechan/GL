@@ -1,8 +1,7 @@
-obj/Main.o: source/Main.cpp source/../header/FrameWork.hpp \
- source/../header/Shape.hpp source/../header/Render.hpp \
- source/../header/Shader.hpp source/../header/VertexData.hpp \
- source/../header/Transform.hpp source/../header/Simple.hpp \
- /usr/local/include/freetype2/ft2build.h \
+obj/Model.o: source/Model.cpp source/../header/Model.hpp \
+ source/../header/VertexData.hpp source/../header/Shader.hpp \
+ source/../header/Transform.hpp source/../lib/stb/stb_image.h \
+ source/../header/Resource.hpp /usr/local/include/freetype2/ft2build.h \
  /usr/local/include/freetype2/freetype/config/ftheader.h \
  /usr/local/include/freetype2/freetype/freetype.h \
  /usr/local/include/freetype2/freetype/config/ftconfig.h \
@@ -17,24 +16,20 @@ obj/Main.o: source/Main.cpp source/../header/FrameWork.hpp \
  /usr/local/include/freetype2/freetype/fterrors.h \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
- source/../header/Resource.hpp source/../header/Help.hpp \
- source/../header/Text.hpp source/../header/Init.hpp \
- source/../header/Window.hpp source/../header/Model.hpp \
- source/../header/Camera.hpp source/../header/Actor.hpp
+ source/../header/Help.hpp source/../header/Camera.hpp \
+ source/../header/Render.hpp source/../header/Actor.hpp
 
-source/../header/FrameWork.hpp:
-
-source/../header/Shape.hpp:
-
-source/../header/Render.hpp:
-
-source/../header/Shader.hpp:
+source/../header/Model.hpp:
 
 source/../header/VertexData.hpp:
 
+source/../header/Shader.hpp:
+
 source/../header/Transform.hpp:
 
-source/../header/Simple.hpp:
+source/../lib/stb/stb_image.h:
+
+source/../header/Resource.hpp:
 
 /usr/local/include/freetype2/ft2build.h:
 
@@ -66,18 +61,10 @@ source/../header/Simple.hpp:
 
 /usr/local/include/freetype2/freetype/fterrdef.h:
 
-source/../header/Resource.hpp:
-
 source/../header/Help.hpp:
 
-source/../header/Text.hpp:
-
-source/../header/Init.hpp:
-
-source/../header/Window.hpp:
-
-source/../header/Model.hpp:
-
 source/../header/Camera.hpp:
+
+source/../header/Render.hpp:
 
 source/../header/Actor.hpp:

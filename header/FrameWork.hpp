@@ -9,5 +9,6 @@
 #include "Help.hpp"
 #include "Init.hpp"
 #include "Resource.hpp"
+#include "Model.hpp"
 
 #endif

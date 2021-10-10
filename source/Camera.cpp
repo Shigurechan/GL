@@ -24,6 +24,7 @@ void FrameWork::Camera::Init()
 	vertex->resize(6);	//頂点配列を初期化
 }
 
+
 // ##################################### 頂点属性を取得　##################################### 
 std::shared_ptr<std::vector<FrameWork::D2::VertexAttribute>> FrameWork::Camera::getVertexAttribute()
 {

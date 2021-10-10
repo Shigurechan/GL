@@ -10,12 +10,14 @@ int main()
 	FrameWork::Camera::Init();	//カメラ初期化
 
 
-	float f = 0;
+	FrameWork::D3::Model model("Model/Kitsune1n2.obj");
+
 	while (*FrameWork::windowContext)
 	{
 		FrameWork::windowContext->FrameUpdate(glm::vec4(0,0,0,255));
 
 		
+		model.Draw(glm::vec3(0,0,0));
 
 
 
@@ -23,8 +25,6 @@ int main()
 
 
 
-
-		f += PI / 100.0f;
 
 
 		FrameWork::windowContext->Wait();

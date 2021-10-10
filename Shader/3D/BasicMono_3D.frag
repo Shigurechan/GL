@@ -1,13 +1,14 @@
 /*#########################################################################
-# íPêFÇÃ3Dï`âÊ
+# 
 ###########################################################################*/
-#extension GL_ARB_explicit_attrib_location: enable 
+#version 420
+#extension GL_ARB_explicit_uniform_location : require
 
 
-layout(location = 2) in vec4 vfragment;	
+layout(location = 3) in vec4 vfragment;	
+layout(location = 4) in vec3 vNormal;	
 
-
-//èoóÕ
+uniform sampler2D uImage;	
 out vec4 fragment;
 
 void main()
