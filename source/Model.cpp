@@ -52,8 +52,9 @@ void FrameWork::D3::Mesh::Draw()
 
 	//描画
       //printf("GGGGGG\n");
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	shader.setUniformMatrix4fv("uTranslate",getMatTranslation());
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       printf("AAAAAAAAAA\n");
 	shader.setUniformMatrix4fv("uRotate", getMatRotate());
 	shader.setUniformMatrix4fv("uScale", getMatScale());
@@ -100,26 +101,24 @@ void FrameWork::D3::Mesh::SetUp()
 
 
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(unsigned int), 
-                  &index[0], GL_STATIC_DRAW);
+
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size() * sizeof(unsigned int),&index[0], GL_DYNAMIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(VertexAttribute), &vertex[0], GL_DYNAMIC_DRAW);  
 
 
       // vertex positions
 	GLint attrib = shader.getAttribLocation("vertexPosition");
       glEnableVertexAttribArray(attrib);	
-      glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(VertexAttribute), &vertex[0], GL_STATIC_DRAW);  
       glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)0);
       
       // vertex texture coords
       attrib = shader.getAttribLocation("vertexUV");
       glEnableVertexAttribArray(attrib);	
-      glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(VertexAttribute), &vertex[0], GL_STATIC_DRAW);  
       glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)(sizeof(GLfloat) * 3));
 
       // vertex normals
       attrib = shader.getAttribLocation("vertexNormal");
       glEnableVertexAttribArray(attrib);	
-      glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(VertexAttribute), &vertex[0], GL_STATIC_DRAW);  
       glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)(sizeof(GLfloat) * 5));
 
       printf("ららら\n");
@@ -239,8 +238,7 @@ FrameWork::D3::Mesh FrameWork::D3::Model::processMesh(aiMesh *m, const aiScene *
             ver.push_back(vert);
 //            printf("yoyoyoyoyoyo\n");
       }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
+     
 /*
       for(unsigned int i = 0; i < m->mNumFaces; i++)
       {
@@ -256,7 +254,7 @@ FrameWork::D3::Mesh FrameWork::D3::Model::processMesh(aiMesh *m, const aiScene *
 
       }
 */
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       //printf("っっっっっっっ\n");
       // process materials
       aiMaterial* material = scene->mMaterials[m->mMaterialIndex];    
@@ -332,7 +330,7 @@ unsigned int FrameWork::D3::Model::TextureFromFile(const char *path, const std::
     int width, height, nrComponents;
     unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 
-      if (data)
+      if (data != NULL)
       {
             GLenum format;
 
