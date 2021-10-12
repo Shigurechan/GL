@@ -2,16 +2,21 @@
 # 
 ###########################################################################*/
 #version 420
-#extension GL_ARB_explicit_uniform_location : require
+//#extension GL_ARB_explicit_uniform_location : require
 
 
-layout(location = 3) in vec4 vfragment;	
-layout(location = 4) in vec3 vNormal;	
+//layout(location = 3) in vec2 vUV;	
+layout(location = 4) in vec4 vfragment;	
 
-uniform sampler2D uImage;	
+//layout(location = 4) in vec3 vNormal;	
+
+
+
+//uniform sampler2D uImage;	
 out vec4 fragment;
 
 void main()
 {
 	fragment = vfragment;
+//	fragment = texture(uImage,vUV);
 }

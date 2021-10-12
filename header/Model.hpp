@@ -33,7 +33,7 @@ namespace FrameWork
 
                   std::vector<VertexAttribute> vertex;
                   std::vector<unsigned int> index;
-                  std::vector<Texture>      texture;
+                  std::vector<Texture> texture;
 
                   unsigned int VAO, VBO, EBO;
 

@@ -16,7 +16,7 @@
 FrameWork::D2::Sprite::Sprite() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicTexture_D2.vert")->data(), FrameWork::LoadShader("Shader/D2/BasicTexture_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_D2.vert")->data(), FrameWork::LoadShader("Shader/2D/BasicTexture_D2.frag")->data());
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 

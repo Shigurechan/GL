@@ -41,6 +41,7 @@ GLuint FrameWork::Shader::loadProgram(const char* vert, const char* frag)
 	}
 	else 
 	{
+		assert(0);
 		return 0;
 	}
 }
@@ -60,6 +61,7 @@ bool FrameWork::Shader::ReadShaderSource(const char* name, std::vector<GLchar>& 
 	{
 		std::cerr << "シェーダーファイルを読み込めません: " << name << std::endl;
 		file.close();
+		assert(0);
 		return false;
 	}
 	else

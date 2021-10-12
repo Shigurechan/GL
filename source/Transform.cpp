@@ -107,7 +107,7 @@ FrameWork::D2::Transform::~Transform()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D3::Transform::Transform()
 {
-	position = glm::vec3(0, 0,0);		//座標
+	position = glm::vec3(0,0,0);		//座標
 	scale = glm::vec3(1,1,1);		//スケール
 	rotateAngle = 0.0f;			//回転ラジアン
 	rotateVector = glm::vec3(0,0,0);	//回転方向

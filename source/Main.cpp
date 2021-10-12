@@ -10,7 +10,7 @@ int main()
 	FrameWork::Camera::Init();	//カメラ初期化
 
 
-	FrameWork::D3::Model model("Model/Kitsune1n2.obj");
+	FrameWork::D3::Model model("Model/test.obj");
 
 	while (*FrameWork::windowContext)
 	{
