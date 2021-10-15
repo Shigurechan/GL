@@ -9,6 +9,7 @@
 #include "../header/Shader.hpp"
 #include "../header/Init.hpp"
 #include "../header/Window.hpp"
+#include "../header/Help.hpp"
 
 
 /*#####################################################################################################################################
@@ -17,13 +18,14 @@
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Circle::Circle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 	vertex = FrameWork::Camera::getVertexAttribute();
 }
 
 // ##################################### 描画 ##################################### 
 void FrameWork::D2::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,const GLushort num, const GLushort w, const GLfloat r)
 {	
+	shader->setEnable();
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -31,25 +33,41 @@ void FrameWork::D2::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,cons
 	if (vertex->size() != num)
 	{
 		vertex->resize(num);
+		
+		glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
 
 		//頂点	
 		GLint attrib = shader->getAttribLocation("vertexPosition");
 		glEnableVertexAttribArray(attrib);
-		glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
 		glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat),(GLvoid*)0);
+		shader->setBindAttribLocation("vertexPosition");
+
 	}
+
+	
+	float n = (PI * 2.0f) / (float)vertex->size();
+	float t = 0.0f;
+	for (int i = 0; i < vertex->size(); i++)
+	{
+		vertex->at(i).position[0] = cos(t) * w;
+		vertex->at(i).position[1] = sin(t) * w;
+
+		t += n;
+	}
+
+
 	//Transform
 	setPosition(pos);			//座標
 	setScale(glm::vec2(1, 1));	//スケール
 	setRotate(r);			//回転
+
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
 	
-	shader->setEnable();
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
 	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
-	shader->setUniform4f("uFragment",color);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * vertex->size(), vertex->data());
+	shader->setUniform4f("uFragment",FrameWork::GetGlColor(color));
 	glDrawArrays(GL_TRIANGLE_FAN, 0, vertex->size());
 	shader->setDisable();
 
@@ -71,7 +89,7 @@ FrameWork::D2::Circle::~Circle()
 FrameWork::D2::Point::Point() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 	
 	vertex = FrameWork::Camera::getVertexAttribute();
 
@@ -79,7 +97,7 @@ FrameWork::D2::Point::Point() : Render()
 	GLint attrib = shader->getAttribLocation("vertexPosition");
 	glEnableVertexAttribArray(attrib);
 	glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
 	shader->setBindAttribLocation("vertexPosition");
 }
 
@@ -128,7 +146,7 @@ FrameWork::D2::Point::~Point()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Line::Line() : Render()
 {	
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(2);
@@ -137,7 +155,7 @@ FrameWork::D2::Line::Line() : Render()
 	GLint attrib = shader->getAttribLocation("vertexPosition");
 	glEnableVertexAttribArray(attrib);
 	glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
 	shader->setBindAttribLocation("vertexPosition");
 
 }
@@ -219,7 +237,7 @@ FrameWork::D2::Line::~Line()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Triangle::Triangle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(3);
@@ -282,7 +300,7 @@ FrameWork::D2::Triangle::~Triangle()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Rectangle::Rectangle() : Render()
 {		
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 	
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(6);
@@ -291,7 +309,7 @@ FrameWork::D2::Rectangle::Rectangle() : Render()
 	GLint attrib = shader->getAttribLocation("vertexPosition");
 	glEnableVertexAttribArray(attrib);
 	glBufferData(GL_ARRAY_BUFFER, vertex->size() * sizeof(VertexAttribute), vertex->data(), GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid*)0);
 	shader->setBindAttribLocation("vertexPosition");
 
 }
@@ -358,7 +376,7 @@ FrameWork::D2::Rectangle::~Rectangle()
 FrameWork::D2::Ellipse::Ellipse() : Render()
 {	
 	
-	shader->Input(FrameWork::LoadShader("Shader/D2/BasicMono_D2.vert")->data(),FrameWork::LoadShader("Shader/D2/BasicMono_D2.frag")->data());
+	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
 
 	vertNum = 0; //頂点数
 	vertex = FrameWork::Camera::getVertexAttribute();

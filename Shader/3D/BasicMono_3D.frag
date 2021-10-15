@@ -6,7 +6,7 @@
 
 
 //layout(location = 3) in vec2 vUV;	
-layout(location = 4) in vec4 vfragment;	
+layout(location = 1) in vec4 vfragment;	
 
 //layout(location = 4) in vec3 vNormal;	
 

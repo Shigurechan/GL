@@ -2,7 +2,7 @@
 # 
 ###########################################################################*/
 #version 420
-#extension GL_ARB_explicit_uniform_location : require
+//#extension GL_ARB_explicit_uniform_location : require
 
 
 layout(location = 0) in vec3 vertexPosition;	
@@ -11,7 +11,7 @@ layout(location = 0) in vec3 vertexPosition;
 
 
 //layout(location = 3) out vec2 vUV;	
-layout(location = 4) out vec4 vFragment;	
+layout(location = 1) out vec4 vFragment;	
 //layout(location = 4) out vec3 vNormal;	
 
 

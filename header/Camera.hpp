@@ -25,11 +25,11 @@ namespace FrameWork
 
 
 		// ###################### 設定　関係 ###################### 
-		static void setPosition(glm::vec2 p);	//座標
+		static void setPosition(glm::vec3 p);	//座標
 		static void setLook(glm::vec3 l);		//視線
 
 		// ###################### 取得　関係 ###################### 
-		static glm::vec2 getPosition();	//座標
+		static glm::vec3 getPosition();	//座標
 		static glm::vec3 getLook();		//視線
 
 		static GLuint getVao();
@@ -40,11 +40,15 @@ namespace FrameWork
 		//カメラ行列を取得
 		static glm::mat4 getViewProjection();		//3Dカメラ
 		static glm::mat4 getProjection_2D();		//2Dカメラ
+
 		static void setScale(glm::vec2 s);			//スケール
 		static void setRotate(float a);			//回転
 		static void setTranslate(glm::vec3 t);		//平行移動
-		static glm::vec2 getSizeScale();			//サイズを取得
-		static void setSizeScale(glm::vec2 s);		//サイズを設定
+		
+
+
+		//static glm::vec2 getSizeScale();			//サイズを取得
+		//static void setSizeScale(glm::vec2 s);		//サイズを設定
 
 	private:
 
@@ -55,7 +59,7 @@ namespace FrameWork
 		static glm::mat4 rotate;	//回転
 		static glm::mat4 translate;	//平行移動
 
-		static glm::vec2 vecPosition;	//座標
+		static glm::vec3 position;	//座標
 		static glm::vec3 vecLook;	//向き(視線)
 		static glm::mat4 view;		//ビュー行列
 		static glm::mat4 projection;	//透視射形行列

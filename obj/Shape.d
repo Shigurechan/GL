@@ -20,7 +20,7 @@ obj/Shape.o: source/Shape.cpp source/../header/Shape.hpp \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Help.hpp source/../header/Shader.hpp \
  source/../header/Init.hpp source/../header/Window.hpp \
- source/../header/Window.hpp
+ source/../header/Window.hpp source/../header/Help.hpp
 
 source/../header/Shape.hpp:
 
@@ -81,3 +81,5 @@ source/../header/Init.hpp:
 source/../header/Window.hpp:
 
 source/../header/Window.hpp:
+
+source/../header/Help.hpp:

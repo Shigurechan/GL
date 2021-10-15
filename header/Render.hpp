@@ -35,6 +35,34 @@ namespace FrameWork
 			
 		};
 	}
+
+
+	namespace D3
+	{
+		class Render : public FrameWork::D3::Transform
+		{
+			public:
+				
+				Render();	//コンストラクタ
+				~Render();	//デストラクタ
+
+				std::shared_ptr<FrameWork::Shader> shader;	//シェーダー
+
+			protected:
+				
+				GLuint vao;	//VertexArrayObject
+				GLuint vbo;	//VertexBufferObject	
+
+				GLuint vio;
+				GLuint uio;
+				GLuint nio;
+
+
+
+			
+		};
+	}
+	
 }
 
 #endif

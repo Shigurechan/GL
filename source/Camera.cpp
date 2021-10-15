@@ -13,9 +13,9 @@ glm::mat4 FrameWork::Camera::rotate = glm::mat4();	//回転
 glm::mat4 FrameWork::Camera::translate = glm::mat4();	//平行移動
 
 //描画行列
-glm::vec2 FrameWork::Camera::vecPosition = glm::vec2(0,0);	//座標
+glm::vec3 FrameWork::Camera::position = glm::vec3(0,0,0);	//座標
 glm::vec3 FrameWork::Camera::vecLook = glm::vec3(0,0,-1);	//向き(視線)
-glm::mat4 FrameWork::Camera::view = glm::lookAt(glm::vec3(vecPosition.x, vecPosition.y, 0.0f), vecLook, glm::vec3(0, 1, 0));	//ビュー行列
+glm::mat4 FrameWork::Camera::view = glm::lookAt(glm::vec3(position.x, position.y, position.z), vecLook, glm::vec3(0, 1, 0));	//ビュー行列
 glm::mat4 FrameWork::Camera::projection = glm::perspective(glm::radians(90.0f), 4.0f / 3.0f, 0.1f, 100.0f);				//透視射形行列
 
 // ##################################### 初期化　##################################### 
@@ -32,23 +32,22 @@ std::shared_ptr<std::vector<FrameWork::D2::VertexAttribute>> FrameWork::Camera::
 }
 
 // ##################################### 座標を設定　##################################### 
-void FrameWork::Camera::setPosition(glm::vec2 p)
+void FrameWork::Camera::setPosition(glm::vec3 p)
 {
-	vecPosition = p;	//座標
-	view = glm::lookAt(glm::vec3(vecPosition.x,vecPosition.y,0), vecLook, glm::vec3(0, 1, 0));
+	position = p;	//座標
 }
 
 // ##################################### 視線を設定 ##################################### 
 void FrameWork::Camera::setLook(glm::vec3 l)
 {
 	vecLook = l;		//向き
-	view = glm::lookAt(glm::vec3(vecPosition.x, vecPosition.y, 0.0f), vecLook, glm::vec3(0, 1, 0));
+	view = glm::lookAt(glm::vec3(position.x, position.y, position.z), vecLook, glm::vec3(0, 1, 0));
 }
 
 // ##################################### 座標を取得 ##################################### 
-glm::vec2 FrameWork::Camera::getPosition()
+glm::vec3 FrameWork::Camera::getPosition()
 {
-	return vecPosition;
+	return position;
 }
 
 // #####################################　視線を取得 ##################################### 

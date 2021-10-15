@@ -112,7 +112,7 @@ GLboolean FrameWork::Shader::CompileInfoLog(GLuint shader,const char* str)
 // ##################################### プログラムオブジェクト作成 ##################################### 
 GLuint FrameWork::Shader::CreateProgram(GLchar* vert,GLchar* frag)
 {
-	const GLuint program = glCreateProgram();	//シェーダープログラムを作成
+	const GLuint p = glCreateProgram();	//シェーダープログラムを作成
 
 	if (vert != NULL)
 	{
@@ -121,15 +121,16 @@ GLuint FrameWork::Shader::CreateProgram(GLchar* vert,GLchar* frag)
 		GLchar* v[] = { NULL };
 		v[0] = vert;
 
-
 		//std::cout << &v[0] << std::endl;
 
 
 		glShaderSource(vobj, 1,&v[0], NULL);
 		glCompileShader(vobj);
+		glAttachShader(p, vobj);
 		CompileInfoLog(vobj, "Complie Error: Vertex Shader");
-		glAttachShader(program, vobj);
 		glDeleteShader(vobj);
+
+
 	}
 	else 
 	{
@@ -145,8 +146,9 @@ GLuint FrameWork::Shader::CreateProgram(GLchar* vert,GLchar* frag)
 
 		glShaderSource(fobj, 1, &v[0], NULL);
 		glCompileShader(fobj);
+		glAttachShader(p, fobj);
 		CompileInfoLog(fobj, "Complie Error: Fragment Shader");
-		glAttachShader(program, fobj);
+
 		glDeleteShader(fobj);
 	}
 	else 
@@ -154,23 +156,29 @@ GLuint FrameWork::Shader::CreateProgram(GLchar* vert,GLchar* frag)
 		std::cerr << "フラグメントシェーダー読み込み失敗" << std::endl;
 	}
 
-	glLinkProgram(program);		//リンクプログラム
-	ProgramInfoLog(program);	//リンク時のログを表示
+	glLinkProgram(p);		//リンクプログラム
+
+	//リンク時のログを表示
+	if(ProgramInfoLog(p) == false)
+	{
+		std::cerr<<"プログラムリンク失敗"<<std::endl;
+		assert(0);
+	}
 	
-	return program;
+	return p;
 }
 
 // ##################################### プログラムのエラーを表示 ##################################### 
-GLboolean FrameWork::Shader::ProgramInfoLog(GLuint program)
+GLboolean FrameWork::Shader::ProgramInfoLog(GLuint p)
 {
 	GLsizei bufSize;
-	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufSize);
+	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &bufSize);
 
-	if (bufSize > 1) 
+	if (bufSize > 0) 
 	{
 		std::vector<GLchar> infoLog(bufSize);	
 		GLsizei length;
-		glGetProgramInfoLog(program, bufSize, &length, &infoLog[0]);
+		glGetProgramInfoLog(p, bufSize, &length, &infoLog[0]);
 		std::cerr<<"Program Info Log: "<< infoLog.data() <<std::endl;
 		return false;
 	}
@@ -291,5 +299,6 @@ void FrameWork::Shader::setUniformMatrix4fv(const char* name, const glm::mat4 m)
 // ##################################### デストラクタ ##################################### 
 FrameWork::Shader::~Shader()
 {
-	glDeleteProgram(program);
+	printf("Shader デストラクタ\n");
+	//glDeleteProgram(program);
 }

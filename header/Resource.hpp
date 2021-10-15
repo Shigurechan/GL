@@ -34,7 +34,17 @@ namespace FrameWork
 
       }SoundFile;
 
+      typedef struct
+      {
 
+            std::vector<glm::vec3> vertex;
+            std::vector<glm::vec3> normal;
+            std::vector<glm::vec2> uv;
+
+            std::vector<GLushort> vertexIndex;
+            std::vector<GLushort> normalIndex;
+            std::vector<GLushort> uvIndex;
+      }ObjFile;
 
 
       TextureFile LoadTexture(const char* fileName);
