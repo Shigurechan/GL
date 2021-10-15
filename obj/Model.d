@@ -18,7 +18,7 @@ obj/Model.o: source/Model.cpp source/../header/Model.hpp \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Help.hpp source/../lib/stb/stb_image.h \
  source/../header/Resource.hpp source/../header/Camera.hpp \
- source/../header/Actor.hpp
+ source/../header/Actor.hpp source/../header/Window.hpp
 
 source/../header/Model.hpp:
 
@@ -71,3 +71,5 @@ source/../header/Resource.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/Window.hpp:

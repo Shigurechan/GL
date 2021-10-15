@@ -188,4 +188,5 @@ void FrameWork::D2::Sprite::Draw(glm::vec2 pos, int texNum, float r, glm::vec2 s
 // ##################################### デストラクタ #####################################
 FrameWork::D2::Sprite::~Sprite()
 {
+	
 }

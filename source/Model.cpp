@@ -13,6 +13,8 @@
 #include "../lib/stb/stb_image.h"
 #include "../header/Resource.hpp"
 #include "../header/Camera.hpp"
+#include "../header/Window.hpp"
+#include "../header/Camera.hpp"
 
 
 FrameWork::D3::Object::Object(ObjFile o) : Render()
@@ -23,6 +25,9 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 
 
 //      printf("%d\n",obj.vertex.size());
+
+
+
 
 	//頂点
 	GLint attrib = shader->getAttribLocation("vertexPosition");
@@ -48,16 +53,17 @@ void FrameWork::D3::Object::Renderer()
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexAttribute) * obj.vertex.size(), obj.vertex.data());
 
 	//Transform
-      setPosition(glm::vec3(0,0,5));    //座標
-	setScale(glm::vec3(1,1,1));         //スケール
-	setRotate(glm::vec3(0,0,0),0);      //回転
+      setPosition(glm::vec3(0,0,-100));    //座標
+	setScale(glm::vec3(100,100,100));    //スケール
+	setRotate(glm::vec3(0,0,0),0);       //回転
 
 	//描画
 	shader->setUniformMatrix4fv("uTranslate",getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
-	shader->setUniform4f("uFragment", GetGlColor(glm::vec4(0,0,255,255)));
+	shader->setUniform4f("uFragment", GetGlColor(glm::vec4(0,255,0,255)));
 	shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
+	//shader->setUniformMatrix4fv("uViewProjection",);
 
 	
 	glDrawArrays(GL_TRIANGLES, 0, obj.vertex.size()); //描画
@@ -178,13 +184,15 @@ void FrameWork::D3::LoadObj(const char* fileName, ObjFile &attribute)
             }
       }
 
-
       for(int i = 0; i< vertexIndex.size(); i++)
       {
             int vert = vertexIndex[i];
 
             obj.vertex.push_back(vertex[vert - 1]);
+            //printf("%f %f %f \n",obj.vertex.at(i).x,obj.vertex.at(i).y,obj.vertex.at(i).z);
       }
+
+      //printf("%d\n\n",obj.vertex.size());
 
       attribute = obj;
 }

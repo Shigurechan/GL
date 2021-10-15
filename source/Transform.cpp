@@ -141,8 +141,8 @@ void FrameWork::D3::Transform::setRotate(glm::vec3 vec,float r)
 	rotateAngle = r;
 	rotateVector = vec;
 	
-	glm::quat qu = glm::angleAxis(glm::degrees(r), vec);
-	matRotate = glm::toMat4(qu);
+	matRotate = glm::rotate(glm::degrees(r), vec);
+	//matRotate = glm::toMat4(qu);
 }
 
 /* ############################################################### 取得 ###############################################################  */

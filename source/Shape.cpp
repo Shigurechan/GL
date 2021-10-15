@@ -66,7 +66,7 @@ void FrameWork::D2::Circle::Draw(const glm::vec2 pos, const glm::vec4 color,cons
 	shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
 	shader->setUniformMatrix4fv("uRotate", getMatRotate());
 	shader->setUniformMatrix4fv("uScale", getMatScale());
-	shader->setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, FrameWork::windowContext->getSize().y, 0.0f, -1.0f, 1.0f));
+	shader->setUniformMatrix4fv("uViewProjection", Camera::getProjection_2D());
 	shader->setUniform4f("uFragment",FrameWork::GetGlColor(color));
 	glDrawArrays(GL_TRIANGLE_FAN, 0, vertex->size());
 	shader->setDisable();

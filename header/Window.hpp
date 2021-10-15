@@ -37,7 +37,6 @@ namespace FrameWork
 		int getFrame()const;			//フレームを取得
 		int getNowTime();				//ミリ秒を取得
 
-
 		const glm::vec2 getSize() const;			//サイズを取得
 		const std::string getDropPath()const;		//ドラック＆ドロップしたパスを取得
 		glm::ivec2 getMousePos();				//マウス座標を取得
