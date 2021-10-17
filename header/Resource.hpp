@@ -41,9 +41,9 @@ namespace FrameWork
             std::vector<glm::vec3> normal;
             std::vector<glm::vec2> uv;
 
-            std::vector<GLushort> vertexIndex;
-            std::vector<GLushort> normalIndex;
-            std::vector<GLushort> uvIndex;
+            std::vector<unsigned int> vertexIndex;
+            std::vector<unsigned int> normalIndex;
+            std::vector<unsigned int> uvIndex;
       }ObjFile;
 
 

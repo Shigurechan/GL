@@ -49,17 +49,14 @@ FrameWork::D3::Render::Render() : Transform()
 	
 	//vao
 	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 
 	//vbo
 	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	
+	//vio	
+	glGenBuffers(1, &vio);
 	
 	/*
-	glGenBuffers(1, &vio);
-	glBindBuffer(GL_ARRAY_BUFFER, vio);
-	
-	
 	glGenBuffers(1, &uio);
 	glBindBuffer(GL_ARRAY_BUFFER, uio);
 	
