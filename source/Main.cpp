@@ -28,14 +28,14 @@ int main()
 
 		if(FrameWork::windowContext->getKeyInput(GLFW_KEY_LEFT) > (short)0)
 		{
-			x += 0.01;
+			x += 0.001;
 //			printf("left\n");
 //			printf("%f , %f \n",x,y);
 
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_RIGHT) > (short)0) 
 		{
-			x += -0.01;
+			x += -0.001;
 //			printf("right\n");
 //			printf("%f , %f \n",x,y);
 
@@ -43,7 +43,7 @@ int main()
 
 		if(FrameWork::windowContext->getKeyInput(GLFW_KEY_UP) > (short)0)
 		{
-			y += 0.01;
+			y += 0.001;
 //			printf("up\n");
 //			printf("%f , %f \n",x,y);
 
@@ -51,7 +51,7 @@ int main()
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_DOWN) > (short)0) 
 		{
-			y += -0.01;
+			y += -0.001;
 //			printf("down\n");
 //			printf("%f , %f \n",x,y);
 
@@ -61,24 +61,25 @@ int main()
 		
 		if(FrameWork::windowContext->getKeyInput(GLFW_KEY_A) > (short)0)
 		{
-			angleY += 0.001;
+			angleY = 0.001;
+			
 			object.setRotate(glm::vec3(0,1,0),angleY);
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_D) > (short)0) 
 		{
-			angleY += -0.001;
+			angleY = -0.001;
 			object.setRotate(glm::vec3(0,1,0),angleY);
 
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_W) > (short)0)
 		{
-			angleY += 0.001;
+			angleY = 0.001;
 			object.setRotate(glm::vec3(1,0,0),angleY);
 
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_S) > (short)0) 
 		{
-			angleY += -0.001;
+			angleY = -0.001;
 			object.setRotate(glm::vec3(1,0,0),angleY); 
 		}
 		

@@ -19,21 +19,27 @@
 
 FrameWork::D3::Object::Object(ObjFile o) : Render()
 {
-      shader->Input(FrameWork::LoadShader("Shader/3D/BasicMono_3D.vert")->data(), FrameWork::LoadShader("Shader/3D/BasicMono_3D.frag")->data());
+      //shader->Input(FrameWork::LoadShader("Shader/3D/BasicMono_3D.vert")->data(), FrameWork::LoadShader("Shader/3D/BasicMono_3D.frag")->data());
+      shader->Input(FrameWork::LoadShader("Shader/3D/BasicTexture_3D.vert")->data(), FrameWork::LoadShader("Shader/3D/BasicTexture_3D.frag")->data());
       obj = o;    //オブジェクトファイル
 
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
 
-      printf("%d\n",obj.vertexIndex.size());
-      printf("%d\n",obj.vertex.size());
+//      printf("%d\n",obj.vertexIndex.size());
+//      printf("%d\n",obj.vertex.size());
 
       //頂点
       GLint attrib = shader->getAttribLocation("vertexPosition");
       glEnableVertexAttribArray(attrib);
       glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid *)0);
       shader->setBindAttribLocation("vertexPosition");
+
+      attrib = shader->getAttribLocation("vertexUV");
+      glEnableVertexAttribArray(attrib);
+      glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * 3));
+      shader->setBindAttribLocation("vertexUV");
 
 
       glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(GLfloat) * 11, obj.vertex.data(), GL_STATIC_DRAW);
@@ -42,10 +48,30 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
       setRotate(glm::vec3(1, 1, 1),0);   //回転
 
 
+      glGenTextures(1, &textureID);		     //テクスチャIDの生成
+	glBindTexture(GL_TEXTURE_2D, textureID); //IDバインド
+
+      glEnable(GL_TEXTURE_2D);
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	//テクスチャ生成
+      FrameWork::TextureFile file = FrameWork::LoadTexture("Assets/debug_texture.png");
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, file.size.x, file.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, file.fileData);
+
+	// テクスチャの補間設定
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
+
 
       //バインド解除
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -55,29 +81,32 @@ void FrameWork::D3::Object::Renderer()
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
+	glBindTexture(GL_TEXTURE_2D, textureID);        //IDバインド
 
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 3 * obj.vertex.size(), obj.vertex.data());
+      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 8 * obj.vertex.size(), obj.vertex.data());
+
+	glActiveTexture(GL_TEXTURE0);		     //テクスチャ有効
 
       //Transform
       setPosition(glm::vec3(0, 0, -50));        //座標
       setScale(glm::vec3(30, 30, 30));          //スケール
-      //setRotate(glm::vec3(0, 1, 0),PI /2);    //回転
 
       //描画
       shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
       shader->setUniformMatrix4fv("uRotate", getMatRotate());
       shader->setUniformMatrix4fv("uScale", getMatScale());
       shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
-      shader->setUniform4f("uFragment", GetGlColor(glm::vec4(0, 255, 0, 255)));
 
-      //glDrawArrays(GL_TRIANGLES, 0, obj.vertex.size()); //描画
       glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+
+
 
 
       //バインド解除
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
       shader->setDisable();
 }
 
@@ -117,7 +146,8 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   {
                         glm::vec3 vert;
                         fscanf(file, "%f %f %fn", &vert.x, &vert.y, &vert.z);
-                        vertex.push_back(vert);
+                        //vertex.push_back(vert);
+                        obj.vertex.push_back(vert);
                   }
                   else if (strcmp(line, "vt") == 0)
                   {
@@ -149,9 +179,9 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         vertexIndex.push_back(v[1]);
                         vertexIndex.push_back(v[2]);
                         
-                        obj.vertexIndex.push_back(v[0]);
-                        obj.vertexIndex.push_back(v[1]);
-                        obj.vertexIndex.push_back(v[2]);
+                        obj.vertexIndex.push_back(v[0] - 1);
+                        obj.vertexIndex.push_back(v[1] - 1);
+                        obj.vertexIndex.push_back(v[2] - 1);
 
                         obj.uvIndex.push_back(u[0]);
                         obj.uvIndex.push_back(u[1]);
@@ -163,7 +193,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   }
             }
       }
-
+/*
       for (int i = 0; i < vertexIndex.size(); i++)
       {
             int vert = vertexIndex[i];
@@ -173,6 +203,6 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
       }
 
       //printf("%d\n\n",obj.vertex.size());
-
+*/
       attribute = obj;
 }

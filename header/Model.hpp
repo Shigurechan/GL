@@ -30,7 +30,7 @@ namespace FrameWork
             private:
                   void operator = (const Object &o);  //コピー禁止
                   ObjFile obj;
-
+                  GLuint textureID;
 
             };
 

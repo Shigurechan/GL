@@ -116,7 +116,7 @@ FrameWork::D3::Transform::Transform()
 
 	//行列を初期化
 	matScale = glm::scale(glm::mat4(1), glm::vec3(1.0f, 1.0f, 1.0f));				//スケール
-	matRotate = glm::rotate(0.0f, glm::vec3(0.0, 0.0, 0.0));					//回転
+	matRotate = glm::rotate(0.0f, glm::vec3(1.0, 1.0, 1.0));					//回転
 	matTranslation = glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.0f, 0.0f));		//平行移動
 }
 
@@ -143,7 +143,8 @@ void FrameWork::D3::Transform::setRotate(glm::vec3 vec,float r)
 	
 	//matRotate = glm::rotate(glm::mat4(1), glm::degrees(r), glm::vec3(0.0, 0.0, 0.0));
 
-	matRotate =  glm::rotate(glm::degrees(r), vec);
+	matRotate = matRotate * glm::rotate(glm::degrees(r), vec);
+
 	//matRotate = glm::toMat4(qu);
 }
 
