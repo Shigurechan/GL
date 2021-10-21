@@ -25,7 +25,7 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
 
 //      printf("%d\n",obj.vertexIndex.size());
 //      printf("%d\n",obj.vertex.size());
@@ -38,11 +38,20 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 
       attrib = shader->getAttribLocation("vertexUV");
       glEnableVertexAttribArray(attrib);
-      glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * 3));
+      glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(obj.vertex.size() * sizeof(obj.vertex[0])));
+
+//      glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * 3 * obj.vertex.size()));
       shader->setBindAttribLocation("vertexUV");
 
 
-      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(GLfloat) * 11, obj.vertex.data(), GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.uv.size() * sizeof(obj.uv[0]), NULL, GL_STATIC_DRAW);
+      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());
+      glBufferSubData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), obj.uv.size() * sizeof(obj.uv[0]), obj.uv.data());
+
+
+      //glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(GLfloat) * 3, obj.vertex.data(), GL_STATIC_DRAW);
+      //glBufferData(GL_ARRAY_BUFFER, obj.uv.size() * sizeof(GLfloat) * 2, obj.uv.data(), GL_STATIC_DRAW);
+      
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);
 
       setRotate(glm::vec3(1, 1, 1),0);   //回転
@@ -64,7 +73,7 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 
 
@@ -80,10 +89,10 @@ void FrameWork::D3::Object::Renderer()
       shader->setEnable();
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
 	glBindTexture(GL_TEXTURE_2D, textureID);        //IDバインド
 
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 8 * obj.vertex.size(), obj.vertex.data());
+      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 3 * obj.vertex.size(), obj.vertex.data());
 
 	glActiveTexture(GL_TEXTURE0);		     //テクスチャ有効
 
@@ -120,8 +129,13 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
 {
       ObjFile obj;
 
-      std::vector<float> vertexIndex;
+      std::vector<int> vertexIndex;
+      std::vector<int> uvIndex;
+      std::vector<int> normalIndex;
+
       std::vector<glm::vec3> vertex;
+      std::vector<glm::vec2> uv;
+      std::vector<glm::vec3> normal;
 
       FILE *file = fopen(fileName, "r");
 
@@ -132,7 +146,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
       }
       else
       {
-            while (true)
+             while (true)
             {
                   char line[500];
 
@@ -175,9 +189,9 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                               assert(0);
                         }
 
-                        vertexIndex.push_back(v[0]);
-                        vertexIndex.push_back(v[1]);
-                        vertexIndex.push_back(v[2]);
+//                        vertexIndex.push_back(v[0]);
+//                        vertexIndex.push_back(v[1]);
+//                        vertexIndex.push_back(v[2]);
                         
                         obj.vertexIndex.push_back(v[0] - 1);
                         obj.vertexIndex.push_back(v[1] - 1);
@@ -193,16 +207,11 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   }
             }
       }
-/*
-      for (int i = 0; i < vertexIndex.size(); i++)
-      {
-            int vert = vertexIndex[i];
+      
 
-            obj.vertex.push_back(vertex[vert - 1]);
-//            printf("%f %f %f \n", obj.vertex.at(i).x, obj.vertex.at(i).y, obj.vertex.at(i).z);
-      }
+     
 
-      //printf("%d\n\n",obj.vertex.size());
-*/
+
+
       attribute = obj;
 }

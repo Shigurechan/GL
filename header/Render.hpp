@@ -53,7 +53,7 @@ namespace FrameWork
 				GLuint vao;	//VertexArrayObject
 				GLuint vbo;	//VertexBufferObject	
 
-				GLuint vio;	//VertexIndexObject;
+				GLuint eao;	//VertexIndexObject;
 				GLuint uio;	//
 				GLuint nio;	//
 

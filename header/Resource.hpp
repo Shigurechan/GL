@@ -38,8 +38,8 @@ namespace FrameWork
       {
 
             std::vector<glm::vec3> vertex;
-            std::vector<glm::vec3> normal;
             std::vector<glm::vec2> uv;
+            std::vector<glm::vec3> normal;
 
             std::vector<unsigned int> vertexIndex;
             std::vector<unsigned int> normalIndex;

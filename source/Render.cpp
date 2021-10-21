@@ -53,8 +53,8 @@ FrameWork::D3::Render::Render() : Transform()
 	//vbo
 	glGenBuffers(1, &vbo);
 	
-	//vio	
-	glGenBuffers(1, &vio);
+	//eao
+	glGenBuffers(1, &eao);
 	
 	/*
 	glGenBuffers(1, &uio);
