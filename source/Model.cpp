@@ -160,14 +160,14 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         glm::vec3 vert;
                         fscanf(file, "%f %f %fn", &vert.x, &vert.y, &vert.z);
                         vertex.push_back(vert);
-            //            obj.vertex.push_back(vert);
+                        obj.vertex.push_back(vert);
                   }
                   else if (strcmp(line, "vt") == 0)
                   {
 
                         glm::vec2 u;
                         fscanf(file, "%f %fn", &u.x, &u.y);
-                        //obj.uv.push_back(u);
+                        obj.uv.push_back(u);
                         uv.push_back(u);
                   }
                   else if (strcmp(line, "vn") == 0)
@@ -175,7 +175,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
 
                         glm::vec3 norm;
                         fscanf(file, "%f %f %fn", &norm.x, &norm.y, &norm.z);
-                        //obj.normal.push_back(norm);
+                        obj.normal.push_back(norm);
                         normal.push_back(norm);
                   }
                   else if (strcmp(line, "f") == 0)
@@ -193,9 +193,9 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         vertexIndex.push_back(v[0]);
                         vertexIndex.push_back(v[1]);
                         vertexIndex.push_back(v[2]);
-                        obj.vertexIndex.push_back(v[0]);
-                        obj.vertexIndex.push_back(v[1]);
-                        obj.vertexIndex.push_back(v[2]);
+                        //obj.vertexIndex.push_back(v[0] - 1);
+                       // obj.vertexIndex.push_back(v[1] - 1);
+                        //obj.vertexIndex.push_back(v[2] - 1);
 
 
                         uvIndex.push_back(u[0]);
@@ -217,7 +217,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
             }
 
 
-            for( unsigned int i = 0; i<vertexIndex.size(); i++ )
+            for( unsigned int i = 0; i < vertexIndex.size(); i++ )
             {
 
                   // Get the indices of its attributes
@@ -225,15 +225,16 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   unsigned int ui = uvIndex[i];
                   unsigned int ni = normalIndex[i];
                   
+                  obj.vertexIndex.push_back(vi - 1);
                   // Get the attributes thanks to the index
                   glm::vec3 v = vertex[ vi - 1 ];
                   glm::vec2 u = uv[ ui - 1 ];
                   glm::vec3 n = normal[ ni - 1 ];
                   
                   // Put the attributes in buffers
-                  obj.vertex.push_back(v);
-                  obj.uv.push_back(u);
-                  obj.normal .push_back(n);
+                 // obj.vertex.push_back(v);
+                 // obj.uv.push_back(u);
+                 // obj.normal .push_back(n);
                   
             }
 	}
