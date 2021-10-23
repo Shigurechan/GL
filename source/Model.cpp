@@ -93,7 +93,7 @@ void FrameWork::D3::Object::Renderer()
 
       //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 3 * obj.vertex.size(), obj.vertex.data());
 
-	glActiveTexture(GL_TEXTURE0);		     //テクスチャ有効
+	glActiveTexture(GL_TEXTURE0); //テクスチャ有効
 
       //Transform
       setPosition(glm::vec3(0, 0, -50));        //座標
@@ -105,7 +105,8 @@ void FrameWork::D3::Object::Renderer()
       shader->setUniformMatrix4fv("uScale", getMatScale());
       shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
 
-      glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+      //glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+      glDrawArrays(GL_TRIANGLES,0,obj.vertex.size());
 
 
 
@@ -160,14 +161,14 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         glm::vec3 vert;
                         fscanf(file, "%f %f %fn", &vert.x, &vert.y, &vert.z);
                         vertex.push_back(vert);
-                        obj.vertex.push_back(vert);
+                 //       obj.vertex.push_back(vert);
                   }
                   else if (strcmp(line, "vt") == 0)
                   {
 
                         glm::vec2 u;
                         fscanf(file, "%f %fn", &u.x, &u.y);
-                        obj.uv.push_back(u);
+                  //      obj.uv.push_back(u);
                         uv.push_back(u);
                   }
                   else if (strcmp(line, "vn") == 0)
@@ -226,15 +227,16 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   unsigned int ni = normalIndex[i];
                   
                   obj.vertexIndex.push_back(vi - 1);
+
                   // Get the attributes thanks to the index
                   glm::vec3 v = vertex[ vi - 1 ];
-                  glm::vec2 u = uv[ ui - 1 ];
+                  glm::vec2 u = uv[ ui - 1];
                   glm::vec3 n = normal[ ni - 1 ];
                   
                   // Put the attributes in buffers
-                 // obj.vertex.push_back(v);
-                 // obj.uv.push_back(u);
-                 // obj.normal .push_back(n);
+                  obj.vertex.push_back(v);
+                  obj.uv.push_back(u);
+                  obj.normal .push_back(n);
                   
             }
 	}
