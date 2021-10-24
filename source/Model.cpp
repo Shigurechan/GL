@@ -27,9 +27,6 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
 
-//      printf("%d\n",obj.vertexIndex.size());
-//      printf("%d\n",obj.vertex.size());
-
       //頂点
       GLint attrib = shader->getAttribLocation("vertexPosition");
       glEnableVertexAttribArray(attrib);
@@ -38,29 +35,24 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 
       attrib = shader->getAttribLocation("vertexUV");
       glEnableVertexAttribArray(attrib);
-      //glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * 3 * obj.vertex.size()));
       glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(obj.vertex.size() * sizeof(obj.vertex[0])));
       shader->setBindAttribLocation("vertexUV");
 
+      //printf("%d\n",obj.uv.size());
 
-      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.uv.size() * sizeof(obj.uv[0]), NULL, GL_STATIC_DRAW);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());
-      glBufferSubData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), obj.uv.size() * sizeof(obj.uv[0]), obj.uv.data());
+      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.uv.size() * sizeof(obj.uv[0]), NULL, GL_STATIC_DRAW);       //頂点
+      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());                                  //頂点データ
+      glBufferSubData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), obj.uv.size() * sizeof(obj.uv[0]), obj.uv.data());      //UVデータ
 
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);             //頂点インデックス
+      
 
-      //glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(GLfloat) * 3, obj.vertex.data(), GL_STATIC_DRAW);
-      //glBufferData(GL_ARRAY_BUFFER, obj.uv.size() * sizeof(GLfloat) * 2, obj.uv.data(), GL_STATIC_DRAW);
-
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);
 
       setRotate(glm::vec3(1, 1, 1),0);   //回転
 
 
       glGenTextures(1, &textureID);		     //テクスチャIDの生成
 	glBindTexture(GL_TEXTURE_2D, textureID); //IDバインド
-
-      glEnable(GL_TEXTURE_2D);
-      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//テクスチャ生成
       FrameWork::TextureFile file = FrameWork::LoadTexture("Assets/debug_texture.png");
@@ -91,7 +83,6 @@ void FrameWork::D3::Object::Renderer()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
 	glBindTexture(GL_TEXTURE_2D, textureID);        //IDバインド
 
-      //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 3 * obj.vertex.size(), obj.vertex.data());
 
 	glActiveTexture(GL_TEXTURE0); //テクスチャ有効
 
@@ -106,6 +97,7 @@ void FrameWork::D3::Object::Renderer()
       shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
 
       glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+      //glDrawElements(GL_TRIANGLES, obj.vertex.size(), GL_UNSIGNED_INT,(void*)0); //描画
       //glDrawArrays(GL_TRIANGLES,0,obj.vertex.size());
 
 
@@ -162,22 +154,22 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         glm::vec3 vert;
                         fscanf(file, "%f %f %fn", &vert.x, &vert.y, &vert.z);
                         vertex.push_back(vert);
-                 //       obj.vertex.push_back(vert);
+                       obj.vertex.push_back(vert);
                   }
                   else if (strcmp(line, "vt") == 0)
                   {
-
                         glm::vec2 u;
                         fscanf(file, "%f %fn", &u.x, &u.y);
-                  //      obj.uv.push_back(u);
-                        uv.push_back(u);
+                        //u.y = 1.0f - u.y;
+                        obj.uv.push_back(u);
+                        //uv.push_back(u);
                   }
                   else if (strcmp(line, "vn") == 0)
                   {
 
                         glm::vec3 norm;
                         fscanf(file, "%f %f %fn", &norm.x, &norm.y, &norm.z);
-                        obj.normal.push_back(norm);
+                  //      obj.normal.push_back(norm);
                         normal.push_back(norm);
                   }
                   else if (strcmp(line, "f") == 0)
@@ -191,7 +183,6 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                               printf("File can't be read by our simple parser : ( Try exporting with other optionsn");
                               assert(0);
                         }
-
                         vertexIndex.push_back(v[0]);
                         vertexIndex.push_back(v[1]);
                         vertexIndex.push_back(v[2]);
@@ -202,52 +193,36 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         uvIndex.push_back(u[0]);
                         uvIndex.push_back(u[1]);
                         uvIndex.push_back(u[2]);
-                        obj.uvIndex.push_back(u[0]);
-                        obj.uvIndex.push_back(u[1]);
-                        obj.uvIndex.push_back(u[2]);
-
+                        obj.uvIndex.push_back(u[0] - 1);
+                        obj.uvIndex.push_back(u[1] - 1);
+                        obj.uvIndex.push_back(u[2] - 1);
 
                         normalIndex.push_back(n[0]);
                         normalIndex.push_back(n[1]);
-                        normalIndex.push_back(n[2]);                        
+                        normalIndex.push_back(n[2]);                                                
                         obj.normalIndex.push_back(n[0]);
                         obj.normalIndex.push_back(n[1]);
                         obj.normalIndex.push_back(n[2]);
-
                   }
             }
-
 
             for( unsigned int i = 0; i < vertexIndex.size(); i++ )
             {
 
                   // Get the indices of its attributes
-                  unsigned int vi = vertexIndex[i];
-                  unsigned int ui = uvIndex[i];
-                  unsigned int ni = normalIndex[i];
+//                  unsigned int vi = vertexIndex[i];
+  //                unsigned int ui = uvIndex[i];
+//                  unsigned int ni = normalIndex[i];
                   
-                  obj.vertexIndex.push_back(vi - 1);
 
-                  // Get the attributes thanks to the index
-                  glm::vec3 v = vertex[ vi - 1 ];
-                  glm::vec2 u = uv[ ui - 1];
-                  glm::vec3 n = normal[ ni - 1 ];
+//                  glm::vec3 v = vertex[ vi - 1 ];
+//                  glm::vec2 u = uv[ ui - 1];
+//                  glm::vec3 n = normal[ ni - 1 ];
                   
-                  // Put the attributes in buffers
-                  obj.vertex.push_back(v);
-                  obj.uv.push_back(u);
-                  obj.normal .push_back(n);
-                  
+                  //obj.vertex.push_back(v);
+                  //obj.uv.push_back(u);
+//                  obj.normal .push_back(n);
             }
 	}
-
-
-      
-      
-
-     
-
-
-
       attribute = obj;
 }
