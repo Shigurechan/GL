@@ -105,8 +105,8 @@ void FrameWork::D3::Object::Renderer()
       shader->setUniformMatrix4fv("uScale", getMatScale());
       shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
 
-      //glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
-      glDrawArrays(GL_TRIANGLES,0,obj.vertex.size());
+      glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+      //glDrawArrays(GL_TRIANGLES,0,obj.vertex.size());
 
 
 
@@ -151,6 +151,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   char line[500];
 
                   int res = fscanf(file, "%s", line);
+
                   if (res == EOF)
                   {
                         break;
@@ -194,10 +195,9 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         vertexIndex.push_back(v[0]);
                         vertexIndex.push_back(v[1]);
                         vertexIndex.push_back(v[2]);
-                        //obj.vertexIndex.push_back(v[0] - 1);
-                       // obj.vertexIndex.push_back(v[1] - 1);
-                        //obj.vertexIndex.push_back(v[2] - 1);
-
+                        obj.vertexIndex.push_back(v[0] - 1);
+                        obj.vertexIndex.push_back(v[1] - 1);
+                        obj.vertexIndex.push_back(v[2] - 1);
 
                         uvIndex.push_back(u[0]);
                         uvIndex.push_back(u[1]);
