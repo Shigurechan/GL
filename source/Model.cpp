@@ -53,9 +53,10 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
 */
       //printf("%d\n",obj.uv.size());
 
-      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.normal.size() * sizeof(obj.normal[0]), NULL, GL_STATIC_DRAW); //頂点
+      //glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), NULL, GL_STATIC_DRAW);     //頂点
+      glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.normal.size() * sizeof(obj.normal[0]), NULL, GL_STATIC_DRAW);     //頂点
 
-      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());                                        //頂点データ
+      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());                                              //頂点データ
       glBufferSubData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), obj.normal.size() * sizeof(obj.normal[0]), obj.normal.data());      //法線データ
 
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);       //頂点インデックス
@@ -175,7 +176,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         glm::vec2 u;
                         fscanf(file, "%f %fn", &u.x, &u.y);
                         //u.y = 1.0f - u.y;
-                        obj.uv.push_back(u);
+//                        obj.uv.push_back(u);
                         uv.push_back(u);
                   }
                   else if (strcmp(line, "vn") == 0)
@@ -183,7 +184,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
 
                         glm::vec3 norm;
                         fscanf(file, "%f %f %fn", &norm.x, &norm.y, &norm.z);
-//                        obj.normal.push_back(norm);
+                        obj.normal.push_back(norm);
                         normal.push_back(norm);
                   }
                   else if (strcmp(line, "f") == 0)
@@ -207,16 +208,16 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         uvIndex.push_back(u[0]);
                         uvIndex.push_back(u[1]);
                         uvIndex.push_back(u[2]);
-                        obj.uvIndex.push_back(u[0] - 1);
-                        obj.uvIndex.push_back(u[1] - 1);
-                        obj.uvIndex.push_back(u[2] - 1);
+                        obj.uvIndex.push_back(u[0]);
+                        obj.uvIndex.push_back(u[1]);
+                        obj.uvIndex.push_back(u[2]);
 
                         normalIndex.push_back(n[0]);
                         normalIndex.push_back(n[1]);
                         normalIndex.push_back(n[2]);                                                
-                        obj.normalIndex.push_back(n[0]);
-                        obj.normalIndex.push_back(n[1]);
-                        obj.normalIndex.push_back(n[2]);
+                        obj.normalIndex.push_back(n[0] - 1);
+                        obj.normalIndex.push_back(n[1] - 1);
+                        obj.normalIndex.push_back(n[2] - 1);
                   }
             }
 
@@ -231,11 +232,11 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
 
 //                  glm::vec3 v = vertex[ vi - 1 ];
                   glm::vec2 u = uv[ ui - 1];
-                  glm::vec3 n = normal[ ni - 1 ];
+                  glm::vec3 n = normal[ ni - 1];
                   
                   //obj.vertex.push_back(v);
-//                  obj.uv.push_back(u);
-                  obj.normal.push_back(n);
+                  //obj.uv.push_back(u);
+                  //obj.normal.push_back(n);
             }
 	}
       attribute = obj;

@@ -15,11 +15,9 @@ int main()
 	FrameWork::D3::LoadObj("Model/Cube.obj",cubeFile);
 	FrameWork::D3::Object cube(cubeFile);
 
-
 	FrameWork::ObjFile groundFile;
 	FrameWork::D3::LoadObj("Model/ground.obj",groundFile);
 	FrameWork::D3::Object ground(groundFile);
-
 
 
 	float y = 0;
@@ -28,6 +26,7 @@ int main()
 	float angleY = 0;
 	float angleX = 0;
 
+	float vecSpeed = 10;
 	while (*FrameWork::windowContext)
 	{
 		FrameWork::windowContext->FrameUpdate(glm::vec4(0,0,0,255));
@@ -36,14 +35,14 @@ int main()
 
 		if(FrameWork::windowContext->getKeyInput(GLFW_KEY_LEFT) > (short)0)
 		{
-			x += 0.1;
+			x += vecSpeed;
 //			printf("left\n");
 //			printf("%f , %f \n",x,y);
 
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_RIGHT) > (short)0) 
 		{
-			x += -0.1;
+			x += -vecSpeed;
 //			printf("right\n");
 //			printf("%f , %f \n",x,y);
 
@@ -51,7 +50,7 @@ int main()
 
 		if(FrameWork::windowContext->getKeyInput(GLFW_KEY_UP) > (short)0)
 		{
-			y += 0.1;
+			y += vecSpeed;
 //			printf("up\n");
 //			printf("%f , %f \n",x,y);
 
@@ -59,7 +58,7 @@ int main()
 		}
 		else if(FrameWork::windowContext->getKeyInput(GLFW_KEY_DOWN) > (short)0) 
 		{
-			y += -0.1;
+			y += -vecSpeed;
 //			printf("down\n");
 //			printf("%f , %f \n",x,y);
 
@@ -90,33 +89,38 @@ int main()
 			angleY = -0.001;
 			cube.setRotate(glm::vec3(1,0,0),angleY); 
 		}
+
+
 		
-		FrameWork::Camera::setLook(glm::vec3(x,y,-1));
-		FrameWork::Camera::setPosition(glm::vec3(0,0,200.0f));
+		FrameWork::Camera::setLook(glm::vec3(0,-1,-1));
+		FrameWork::Camera::setPosition(glm::vec3(0,100,300));
 
 
 		//Cube
 		cube.shader->setEnable();
-		cube.setPosition(glm::vec3(0,10,0));
+		cube.setPosition(glm::vec3(0,50,30));
 		cube.setScale(glm::vec3(30,30,30));
+//		cube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));
 		cube.shader->setUniform3f("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		cube.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		cube.shader->setUniform3f("lightPos", glm::vec3(0,0,10.0f));
-		printf("あああ\n");
+		cube.shader->setUniform3f("lightPos", glm::vec3(0,0,0.0f));
 		cube.shader->setUniform3f("viewPos",FrameWork::Camera::getPosition());
-		printf("いいい\n");
-
 		cube.Renderer();
 		cube.shader->setDisable();
 
+
+
+
+
 		//Ground
 		ground.shader->setEnable();
-		ground.setPosition(glm::vec3(0,-50,-5));
-		ground.setScale(glm::vec3(20,20,20));
+		ground.setPosition(glm::vec3(0,0,0));
+		ground.setScale(glm::vec3(1,1,1));
 		ground.shader->setUniform3f("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		ground.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		ground.shader->setUniform3f("lightPos", glm::vec3(0,0,10));
-//		ground.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
+		ground.shader->setUniform3f("lightPos", glm::vec3(0,0,0));
+		ground.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
+		//ground.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,100,0,255)));
 		ground.Renderer();
 		ground.shader->setDisable();
 
