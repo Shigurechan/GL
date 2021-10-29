@@ -15,7 +15,8 @@ obj/Init.o: source/Init.cpp source/../header/Init.hpp \
  /usr/local/include/freetype2/freetype/fterrors.h \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
- source/../header/Window.hpp source/../header/Resource.hpp
+ source/../header/Window.hpp source/../header/Resource.hpp \
+ source/../header/VertexData.hpp
 
 source/../header/Init.hpp:
 
@@ -56,3 +57,5 @@ source/../header/Help.hpp:
 source/../header/Window.hpp:
 
 source/../header/Resource.hpp:
+
+source/../header/VertexData.hpp:

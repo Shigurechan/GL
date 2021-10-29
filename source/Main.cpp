@@ -12,7 +12,8 @@ int main()
 
 	FrameWork::ObjFile lightFile;
 	FrameWork::D3::LoadObj("Model/Cube.obj", lightFile);
-	FrameWork::D3::Object lightCube(lightFile,"Shader/3D/BasicMono_3D.vert","Shader/3D/BasicMono_3D.frag");
+	//FrameWork::D3::Object lightCube(lightFile,"Shader/3D/BasicMono_3D.vert","Shader/3D/BasicMono_3D.frag");
+	FrameWork::D3::Object lightCube(lightFile,"Shader/3D/Phong.vert","Shader/3D/Phong.frag");
 
 	FrameWork::ObjFile cubeFile;
 	FrameWork::D3::LoadObj("Model/Cube.obj", cubeFile);
@@ -147,17 +148,21 @@ int main()
 		// LightCube
 		lightCube.shader->setEnable();
 		lightCube.setPosition(lightPos);
-		lightCube.setScale(glm::vec3(40, 40, 40));
-		lightCube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));		
+		lightCube.setScale(glm::vec3(1, 1, 1));
+		//lightCube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));		
+		lightCube.shader->setUniform3f("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+		lightCube.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		lightCube.shader->setUniform3f("lightPos",lightPos);
+		lightCube.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
 		lightCube.Renderer();
 		lightCube.shader->setDisable();
 
 		// Cube
 		cube.shader->setEnable();
 		cube.setPosition(cubePos);
-		cube.setScale(glm::vec3(40, 40, 40));
+		cube.setScale(glm::vec3(50, 50, 50));
 //		cube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));
-		cube.shader->setUniform3f("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+		cube.shader->setUniform3f("objectColor", FrameWork::GetGlColor(glm::vec4(255,255,255,255)));
 		cube.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		cube.shader->setUniform3f("lightPos",lightPos);
 		cube.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
@@ -173,7 +178,7 @@ int main()
 		ground.shader->setUniform3f("lightPos", lightPos);
 		ground.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
 		// ground.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,100,0,255)));
-		ground.Renderer();
+//		ground.Renderer();
 		ground.shader->setDisable();
 
 		FrameWork::windowContext->Wait();

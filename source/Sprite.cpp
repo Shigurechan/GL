@@ -27,6 +27,7 @@ FrameWork::D2::Sprite::Sprite() : Render()
 	glVertexAttribPointer(attrib, 4, GL_FLOAT, GL_FALSE, 11 * sizeof(GLfloat), (GLvoid *)0);
 	shader->setBindAttribLocation("vertexPosition");
 
+
 	//UV
 	attrib = shader->getAttribLocation("vertexUV");
 	glEnableVertexAttribArray(attrib);

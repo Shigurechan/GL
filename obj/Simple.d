@@ -15,10 +15,10 @@ obj/Simple.o: source/Simple.cpp source/../header/Simple.hpp \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
  source/../header/Resource.hpp source/../header/Help.hpp \
- source/../lib/stb/stb_image.h source/../header/Window.hpp \
- source/../header/Resource.hpp source/../header/Init.hpp \
- source/../header/Window.hpp source/../header/Shader.hpp \
- source/../header/Help.hpp
+ source/../header/VertexData.hpp source/../lib/stb/stb_image.h \
+ source/../header/Window.hpp source/../header/Resource.hpp \
+ source/../header/Init.hpp source/../header/Window.hpp \
+ source/../header/Shader.hpp source/../header/Help.hpp
 
 source/../header/Simple.hpp:
 
@@ -55,6 +55,8 @@ source/../header/Simple.hpp:
 source/../header/Resource.hpp:
 
 source/../header/Help.hpp:
+
+source/../header/VertexData.hpp:
 
 source/../lib/stb/stb_image.h:
 

@@ -14,7 +14,8 @@ obj/Resource.o: source/Resource.cpp source/../header/Resource.hpp \
  /usr/local/include/freetype2/freetype/fterrors.h \
  /usr/local/include/freetype2/freetype/ftmoderr.h \
  /usr/local/include/freetype2/freetype/fterrdef.h \
- source/../header/Help.hpp source/../lib/stb/stb_image.h
+ source/../header/Help.hpp source/../header/VertexData.hpp \
+ source/../lib/stb/stb_image.h
 
 source/../header/Resource.hpp:
 
@@ -49,5 +50,7 @@ source/../header/Resource.hpp:
 /usr/local/include/freetype2/freetype/fterrdef.h:
 
 source/../header/Help.hpp:
+
+source/../header/VertexData.hpp:
 
 source/../lib/stb/stb_image.h:
