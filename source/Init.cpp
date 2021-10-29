@@ -35,10 +35,22 @@ namespace FrameWork
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);						//アルファブレンド有効
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//ブレンドタイプ
+		glEnable(GL_MULTISAMPLE);  					//MSAA
+		glEnable(GL_DEPTH_TEST);					//
+		glDepthFunc(GL_ALWAYS); 					//
+
+		//マウス移動
+		if( GLFW_NOT_INITIALIZED == glfwRawMouseMotionSupported())
+		{
+			std::cerr<< "GLFW_NOT_INITIALIZED"<<std::endl;
+		}
 
 		//OpenGL Verison 4.5 Core Profile　を選択する
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver.x);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver.y);
+		glfwWindowHint(GLFW_SAMPLES, 2000);	//MSAA
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 

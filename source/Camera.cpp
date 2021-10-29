@@ -41,7 +41,13 @@ void FrameWork::Camera::setPosition(glm::vec3 p)
 void FrameWork::Camera::setLook(glm::vec3 l)
 {
 	vecLook = l;		//向き
-	view = glm::lookAt(glm::vec3(position.x, position.y, position.z), vecLook, glm::vec3(0, 1, 0));
+
+	glm::vec3 up = glm::vec3(0, 1, 0);
+	glm::vec3 cameraDirection = glm::normalize(position - vecLook);
+	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+	glm::vec3 cameraUp = glm::cross(vecLook, cameraRight);
+
+	view = glm::lookAt(glm::vec3(position.x, position.y, position.z), position + vecLook,up);
 }
 
 // ##################################### 座標を取得 ##################################### 

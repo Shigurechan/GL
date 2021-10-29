@@ -26,7 +26,7 @@ void main()
 	gl_Position = (uViewProjection * model) * vertex;
 	
 	vPosition = vec3(model * vec4(vertexPosition,1.0));
-	vNormal = vertexNormal;
+	vNormal = mat3(transpose(inverse(model))) * vertexNormal;
 
 
 }

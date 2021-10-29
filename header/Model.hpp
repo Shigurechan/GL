@@ -23,7 +23,7 @@ namespace FrameWork
             class Object : public Render
             {
             public: 
-                  Object(ObjFile o);
+                  Object(ObjFile o,const char* vert,const char* frag);
                   ~Object();
                   void Renderer();
 

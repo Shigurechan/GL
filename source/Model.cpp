@@ -17,9 +17,9 @@
 #include "../header/Window.hpp"
 #include "../header/Camera.hpp"
 
-FrameWork::D3::Object::Object(ObjFile o) : Render()
+FrameWork::D3::Object::Object(ObjFile o,const char* vert,const char* frag) : Render()
 {
-      shader->Input(FrameWork::LoadShader("Shader/3D/Phong.vert")->data(), FrameWork::LoadShader("Shader/3D/Phong.frag")->data());
+      shader->Input(FrameWork::LoadShader(vert)->data(), FrameWork::LoadShader(frag)->data());
 //      shader->Input(FrameWork::LoadShader("Shader/3D/BasicMono_3D.vert")->data(), FrameWork::LoadShader("Shader/3D/BasicMono_3D.frag")->data());
       //shader->Input(FrameWork::LoadShader("Shader/3D/BasicTexture_3D.vert")->data(), FrameWork::LoadShader("Shader/3D/BasicTexture_3D.frag")->data());
       obj = o;    //オブジェクトファイル
@@ -56,16 +56,16 @@ FrameWork::D3::Object::Object(ObjFile o) : Render()
       //glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), NULL, GL_STATIC_DRAW);     //頂点
       glBufferData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]) + obj.normal.size() * sizeof(obj.normal[0]), NULL, GL_STATIC_DRAW);     //頂点
 
-      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());                                              //頂点データ
+      glBufferSubData(GL_ARRAY_BUFFER, 0, obj.vertex.size() * sizeof(obj.vertex[0]), obj.vertex.data());                                              //座標データ
       glBufferSubData(GL_ARRAY_BUFFER, obj.vertex.size() * sizeof(obj.vertex[0]), obj.normal.size() * sizeof(obj.normal[0]), obj.normal.data());      //法線データ
 
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);       //頂点インデックス
+//      glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.vertexIndex.size() * sizeof(unsigned int), obj.vertexIndex.data(), GL_STATIC_DRAW);       //頂点インデックス
       
 
       //Transform
-      setRotate(glm::vec3(1, 1, 1),0);    //回転
-      setPosition(glm::vec3(0, 0, 0));    //座標
-      setScale(glm::vec3(1, 1,1));        //スケール
+      //setRotate(glm::vec3(1, 1, 1),0);    //回転
+      //setPosition(glm::vec3(0, 0, 0));    //座標
+      //setScale(glm::vec3(1, 1,1));        //スケール
 
 
 //      glGenTextures(1, &textureID);		     //テクスチャIDの生成
@@ -113,7 +113,8 @@ void FrameWork::D3::Object::Renderer()
       shader->setUniformMatrix4fv("uScale", getMatScale());
       shader->setUniformMatrix4fv("uViewProjection",FrameWork::Camera::getViewProjection());
       
-      glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+//      glDrawElements(GL_TRIANGLES, obj.vertexIndex.size(), GL_UNSIGNED_INT,(void*)0); //描画
+      glDrawArrays(GL_TRIANGLES, 0,obj.vertex.size()); //描画
       
 
 
@@ -169,7 +170,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                         glm::vec3 vert;
                         fscanf(file, "%f %f %fn", &vert.x, &vert.y, &vert.z);
                         vertex.push_back(vert);
-                       obj.vertex.push_back(vert);
+  //                     obj.vertex.push_back(vert);
                   }
                   else if (strcmp(line, "vt") == 0)
                   {
@@ -184,7 +185,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
 
                         glm::vec3 norm;
                         fscanf(file, "%f %f %fn", &norm.x, &norm.y, &norm.z);
-                        obj.normal.push_back(norm);
+                  //      obj.normal.push_back(norm);
                         normal.push_back(norm);
                   }
                   else if (strcmp(line, "f") == 0)
@@ -198,46 +199,43 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                               printf("File can't be read by our simple parser : ( Try exporting with other optionsn");
                               assert(0);
                         }
+
+
+
                         vertexIndex.push_back(v[0]);
                         vertexIndex.push_back(v[1]);
                         vertexIndex.push_back(v[2]);
-                        obj.vertexIndex.push_back(v[0] - 1);
-                        obj.vertexIndex.push_back(v[1] - 1);
-                        obj.vertexIndex.push_back(v[2] - 1);
-
+                        
                         uvIndex.push_back(u[0]);
                         uvIndex.push_back(u[1]);
                         uvIndex.push_back(u[2]);
-                        obj.uvIndex.push_back(u[0]);
-                        obj.uvIndex.push_back(u[1]);
-                        obj.uvIndex.push_back(u[2]);
-
+                        
                         normalIndex.push_back(n[0]);
                         normalIndex.push_back(n[1]);
                         normalIndex.push_back(n[2]);                                                
-                        obj.normalIndex.push_back(n[0] - 1);
-                        obj.normalIndex.push_back(n[1] - 1);
-                        obj.normalIndex.push_back(n[2] - 1);
+                        
                   }
             }
 
             for( unsigned int i = 0; i < vertexIndex.size(); i++ )
             {
 
-                  // Get the indices of its attributes
-//                  unsigned int vi = vertexIndex[i];
+                  unsigned int vi = vertexIndex[i];
                   unsigned int ui = uvIndex[i];
                   unsigned int ni = normalIndex[i];
                   
 
-//                  glm::vec3 v = vertex[ vi - 1 ];
+
+                  glm::vec3 v = vertex[ vi - 1];
                   glm::vec2 u = uv[ ui - 1];
                   glm::vec3 n = normal[ ni - 1];
-                  
-                  //obj.vertex.push_back(v);
-                  //obj.uv.push_back(u);
-                  //obj.normal.push_back(n);
+
+
+                  obj.vertex.push_back(v);
+                  obj.uv.push_back(u);
+                  obj.normal.push_back(n);
             }
+
 	}
       attribute = obj;
 }

@@ -58,6 +58,10 @@ FrameWork::Window::Window(glm::ivec2 size, const char* title)
 	glfwSetScrollCallback(*window,MouseScroll);	//マウスのホイール
 	glfwSetCharCallback(*window,KeyInputChar);	//テキスト入力
 	glfwSetKeyCallback(*window,KeyInput);		//キー入力
+	
+
+    	glfwSetInputMode(*window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 
 	Resize(*window, size.x, size.y);	//リサイズ
 }
@@ -191,10 +195,6 @@ void FrameWork::Window::FrameUpdate(glm::vec4 color)
 	float c = 1.0f / 255.0f;
 	glClearColor(color.x * c, color.y * c, color.z * c, color.w * c);							//カラーバッファのクリア色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);	//フレームバッファを初期化
-
-	glEnable(GL_BLEND);	//アルファブレンド有効
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//ブレンドタイプ
-
 
 	//フレームレートを制御する
 	if (count == 0)
