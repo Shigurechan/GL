@@ -48,7 +48,6 @@ int main()
 		FrameWork::windowContext->FrameUpdate(glm::vec4(0, 0, 0, 255));
 
 
-
 		nowPos = FrameWork::windowContext->getMousePos();
 		glm::vec2 vec = nowPos - prevPos;
 		vec.x = vec.x * vecSpeed;
