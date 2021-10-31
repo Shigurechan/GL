@@ -25,7 +25,7 @@ namespace FrameWork
 			void setPosition(glm::vec2 p);	//座標
 			void setScale(glm::vec2 s);		//スケール
 			void setRotate(float r);		//回転
-
+			
 			//取得
 			glm::vec2 getPosition();	//座標
 			glm::vec2 getScale();		//スケール
@@ -62,9 +62,10 @@ namespace FrameWork
 			~Transform();		//デストラクタ
 
 			//設定
-			void setPosition(glm::vec3 p);		//座標
-			void setScale(glm::vec3 s);			//スケール
-			void setRotate(glm::vec3 vec,float r);	//回転
+			void setPosition(glm::vec3 p);			//座標
+			void setScale(glm::vec3 s);				//スケール
+			void setRotate(glm::vec3 vec,float r);		//回転
+			void setRotateMult(glm::vec3 vec,float r);	//回転 かけ算
 
 			//取得
 			glm::vec3 getPosition();	//座標

@@ -344,6 +344,8 @@ namespace FrameWork
                 FrameWork::Shader shader;
 
                 shader.Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
+                shader.setEnable(); //シェーダーを有効にする
+
                 GLuint vao; //vao
                 GLuint vbo; //vbo
 
@@ -364,21 +366,26 @@ namespace FrameWork
                 glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
                 //頂点属性
-                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-                glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-                glEnableVertexAttribArray(0);
 
+                GLint attrib = shader.getAttribLocation("vertexPosition");
+                glEnableVertexAttribArray(attrib);
+                glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid *)0);
+                shader.setBindAttribLocation("vertexPosition");
+
+
+                attrib = shader.getAttribLocation("vertexUV");
+                glEnableVertexAttribArray(attrib);
+                glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid *)(2 * sizeof(GLfloat)));
+                shader.setBindAttribLocation("vertexUV");
+
+
+                glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+
+                
                 //FreeTypeを初期化
 
                 //FreeType
-                FT_Library ft;  //freetype
                 FT_Face face;   //フェイス
-
-                //初期化 
-                if (FT_Init_FreeType(&ft) != 0)
-                {
-                    std::cerr << "ERROR: FREETYPE: Could not init FreeType Library" << std::endl;
-                }
 
                 //フェイス作成
                 if (font != NULL) 
@@ -390,27 +397,15 @@ namespace FrameWork
                 }
                 else 
                 {
-                    //フォントがNULLだったら既定のフォントをロードする
-                    if (FT_New_Face(ft, "abc", 0, &face) != 0)
-                    {
-                        std::cerr << "ERROR: FREETYPE: Failed to load font" << std::endl;
-                    }
-
+                    std::cerr << "ERROR: FREETYPE: Failed to load font" << std::endl;
                 }
 
                 FT_Set_Pixel_Sizes(face, 0, charSize);  //ピクセルサイズを指定
                 float scale = 1.0f;
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
-                //アルファブレンドを有効
-                glEnable(GL_BLEND);
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-                //色をRGBにして位置を反転
+                //位置を反転
                 pos.y = FrameWork::windowContext->getSize().y - pos.y - charSize;
-                const float c = 1.0f / 255;
-                color = FrameWork::GetGlColor(color);
-
+                
                 //マルチバイト文字をワイド文字変換
                 wchar_t txt[1000] = { L'\0' };
                 char text[1000];
@@ -487,17 +482,18 @@ namespace FrameWork
 
                     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
-                    shader.setEnable(); //シェーダーを有効にする
 
                     //Unform
-                    shader.setUniform4f("uTextColor", color);
+                    shader.setUniform4f("uFragment", color);
                     shader.setUniformMatrix4fv("uViewProjection", glm::ortho(0.0f, FrameWork::windowContext->getSize().x, 0.0f, FrameWork::windowContext->getSize().y));
 
                     glDrawArrays(GL_TRIANGLES, 0, 6);
 
                     glBindTexture(GL_TEXTURE_2D, 0);
                     glDeleteTextures(1, &ch.textureID);
-                    shader.setDisable();            //シェーダーを無効にする
+
+
+
 
                     pos.x += ((ch.Advance >> 6) * scale); //次のグリフに進める
 
@@ -513,7 +509,9 @@ namespace FrameWork
 
                 //グリフ解放
                 FT_Done_Face(face);
-                //FT_Done_FreeType(ft);
+
+                shader.setDisable();            //シェーダーを無効にする
+
             }
         }
 

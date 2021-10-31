@@ -139,14 +139,18 @@ void FrameWork::D3::Transform::setScale(glm::vec3 s)
 void FrameWork::D3::Transform::setRotate(glm::vec3 vec,float r)
 {
 	rotateAngle = r;
-	rotateVector = vec;
-	
-	//matRotate = glm::rotate(glm::mat4(1), glm::degrees(r), glm::vec3(0.0, 0.0, 0.0));
-
-	matRotate = matRotate * glm::rotate(glm::degrees(r), vec);
-
-	//matRotate = glm::toMat4(qu);
+	rotateVector = vec;	
+	matRotate = glm::rotate(glm::mat4(1),r, vec);
 }
+
+// ##################################### 回転 かけ算　設定 ##################################### 
+void FrameWork::D3::Transform::setRotateMult(glm::vec3 vec,float r)
+{
+	rotateAngle = r;
+	rotateVector = vec;	
+	matRotate = glm::rotate(glm::mat4(1), r, vec) * matRotate;
+}
+
 
 /* ############################################################### 取得 ###############################################################  */
 

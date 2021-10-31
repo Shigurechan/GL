@@ -299,6 +299,6 @@ void FrameWork::Shader::setUniformMatrix4fv(const char* name, const glm::mat4 m)
 // ##################################### デストラクタ ##################################### 
 FrameWork::Shader::~Shader()
 {
-	printf("Shader デストラクタ\n");
-	//glDeleteProgram(program);
+	//printf("Shader デストラクタ\n");
+	glDeleteProgram(program);
 }
