@@ -192,6 +192,7 @@ int FrameWork::Window::getNowTime()
 // ##################################### 待機フレームを計算 ##################################### 
 void FrameWork::Window::FrameUpdate(glm::vec4 color)
 {
+	glClearDepth(1.0f);
 	float c = 1.0f / 255.0f;
 	glClearColor(color.x * c, color.y * c, color.z * c, color.w * c);							//カラーバッファのクリア色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);	//フレームバッファを初期化

@@ -17,61 +17,59 @@
 #include "../header/Window.hpp"
 #include "../header/Camera.hpp"
 
-FrameWork::D3::Object::Object(ObjFile o, const char *vert, const char *frag) : Render()
+FrameWork::D3::Object::Object(ObjFile *o, short type) : Render()
 {
-      shader->Input(FrameWork::LoadShader(vert)->data(), FrameWork::LoadShader(frag)->data());
+      renderType = type;
       obj = o; //オブジェクトファイル
+}
 
+void FrameWork::D3::Object::setTexture(TextureFile *file)
+{
+      texture = file;
 
+      glGenTextures(1, &textureID);            //テクスチャIDの生成
+      glBindTexture(GL_TEXTURE_2D, textureID); // IDバインド
+
+      //テクスチャ生成
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, file->size.x, file->size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, file->fileData);
+
+      // テクスチャの補間設定
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glGenerateMipmap(GL_TEXTURE_2D);
+
+      glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void FrameWork::D3::Object::setVertexAttribute(const char *str, int num)
+{
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
 
-      //座標
-      GLint attrib = shader->getAttribLocation("vertexPosition");
-      glEnableVertexAttribArray(attrib);
-      glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
-      shader->setBindAttribLocation("vertexPosition");
+      shader->setVertexAttribute(str, num);
 
-      /*
-            //UV
-            attrib = shader->getAttribLocation("vertexUV");
-            glEnableVertexAttribArray(attrib);
-            glVertexAttribPointer(attrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-            shader->setBindAttribLocation("vertexUV");
-      */
-
-      //法線
-      attrib = shader->getAttribLocation("vertexNormal");
-      glEnableVertexAttribArray(attrib);
-      glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(5 * sizeof(GLfloat)));
-      shader->setBindAttribLocation("vertexNormal");
-
-      glBufferData(GL_ARRAY_BUFFER, obj.attribute.size() * sizeof(VertexAttribute), obj.attribute.data(), GL_STATIC_DRAW);    //頂点属性
-      //glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.index.size() * sizeof(unsigned int), obj.index.data(), GL_STATIC_DRAW);       //頂点インデックス
-
-
-      //      glGenTextures(1, &textureID);		     //テクスチャIDの生成
-      //	glBindTexture(GL_TEXTURE_2D, textureID); //IDバインド
-
-      /*
-            //テクスチャ生成
-            FrameWork::TextureFile file = FrameWork::LoadTexture("Assets/debug_texture.png");
-
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, file.size.x, file.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, file.fileData);
-
-            // テクスチャの補間設定
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glGenerateMipmap(GL_TEXTURE_2D);
-      */
-
-      //バインド解除
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
-      //	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void FrameWork::D3::Object::setVertexBuffer()
+{
+      glBindVertexArray(vao);
+      glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+      glBufferData(GL_ARRAY_BUFFER, obj->attribute.size() * sizeof(VertexAttribute), obj->attribute.data(), GL_STATIC_DRAW); //頂点属性
+
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glBindVertexArray(0);
+}
+
+void FrameWork::D3::Object::setIndexBuffer()
+{
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj->index.size() * sizeof(unsigned int), obj->index.data(), GL_STATIC_DRAW); //頂点インデックス
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -80,10 +78,9 @@ void FrameWork::D3::Object::Renderer()
       // shader->setEnable();
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
-      //	glBindTexture(GL_TEXTURE_2D, textureID);        //IDバインド
+      glBindTexture(GL_TEXTURE_2D, textureID); // IDバインド
 
-      // glActiveTexture(GL_TEXTURE0); //テクスチャ有効
+      glActiveTexture(GL_TEXTURE0); //テクスチャ有効
 
       //描画
       shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
@@ -91,20 +88,27 @@ void FrameWork::D3::Object::Renderer()
       shader->setUniformMatrix4fv("uScale", getMatScale());
       shader->setUniformMatrix4fv("uViewProjection", FrameWork::Camera::getViewProjection());
 
-      //glDrawElements(GL_TRIANGLES, obj.index.size(), GL_UNSIGNED_INT,(void*)0); //描画
-      glDrawArrays(GL_TRIANGLES, 0, obj.attribute.size()); //描画
+      if (obj->index.size() > 0)
+      {
+            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eao);
+            // glDrawElements(GL_TRIANGLES, obj->index.size(), GL_UNSIGNED_INT,(void*)0); //描画
+            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      }
+      else
+      {
+      }
+
+      glDrawArrays(GL_TRIANGLES, 0, obj->attribute.size()); //描画
 
       //バインド解除
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-      // glBindTexture(GL_TEXTURE_2D, 0);
+      glBindTexture(GL_TEXTURE_2D, 0);
       // shader->setDisable();
 }
 
 FrameWork::D3::Object::~Object()
 {
-      
 }
 
 // ##################################### .objファイル読み込み #####################################
@@ -187,7 +191,6 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   glm::vec2 u = uv[ui - 1];
                   glm::vec3 n = normal[ni - 1];
 
-
                   VertexAttribute attrib;
 
                   attrib.position[0] = v.x;
@@ -200,7 +203,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   attrib.normal[0] = n.x;
                   attrib.normal[1] = n.y;
                   attrib.normal[2] = n.z;
-                  
+
                   obj.attribute.push_back(attrib);
             }
       }

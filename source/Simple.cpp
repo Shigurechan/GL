@@ -341,9 +341,8 @@ namespace FrameWork
         {
             if (str != NULL)
             {
-                FrameWork::Shader shader;
+                FrameWork::Shader shader("Shader/2D/BasicText_2D.vert","Shader/2D/BasicText_2D.frag");
 
-                shader.Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
                 shader.setEnable(); //シェーダーを有効にする
 
                 GLuint vao; //vao
@@ -513,6 +512,9 @@ namespace FrameWork
                 shader.setDisable();            //シェーダーを無効にする
 
             }
+
+          
+
         }
 
         // ##################################### スクリーン座標を取得 ##################################### 

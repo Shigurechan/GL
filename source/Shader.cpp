@@ -1,4 +1,5 @@
 #include "../header/Shader.hpp"
+#include "../header/Resource.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -7,24 +8,48 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // ##################################### コンストラクタ ##################################### 
-FrameWork::Shader::Shader()
+FrameWork::Shader::Shader(const char* vert,const char* frag)
 {
-	program = 0;	//シェーダープログラムを初期化
-}
-
-// ##################################### シェーダーをロード ##################################### 
-bool FrameWork::Shader::Input(GLchar* vert,GLchar* frag)	//シェーダー読み込み
-{	
-	program = CreateProgram(vert,frag);
+	program = CreateProgram(FrameWork::LoadShader(vert)->data(),FrameWork::LoadShader(frag)->data());
 
 	if (program == 0)
 	{
 		std::cerr << "シェーダープログラム作成エラー" << std::endl;
-		return false;
+		assert(0);
 	}
 
-	return true;
+	attributeSize = 0;	//頂点サイズ
+	offset = 0;			//頂点オフセット
 }
+
+// ##################################### 頂点情報の数を指定 ##################################### 
+void FrameWork::Shader::setVertexAttributeSize(int num)
+{
+	attributeSize = num / sizeof(GLfloat);
+}
+
+// ##################################### 頂点情報 設定 ##################################### 
+void FrameWork::Shader::setVertexAttribute(const char* str,int num)
+{
+
+	if(str != NULL)
+	{
+		GLint attrib = getAttribLocation(str);
+		glEnableVertexAttribArray(attrib);
+		glVertexAttribPointer(attrib, num, GL_FLOAT, GL_FALSE,  attributeSize * sizeof(GLfloat), (GLvoid *)(sizeof(GLfloat) * offset));
+		setBindAttribLocation(str);
+	}
+
+	offset += num;
+}
+
+// ##################################### 頂点情報 再設定 ##################################### 
+void FrameWork::Shader::setVertexAttribute_Reset()
+{
+	offset  = 0;
+	attributeSize = 0;
+}
+
 
 // ##################################### プログラムオブジェクトをロード ##################################### 
 GLuint FrameWork::Shader::loadProgram(const char* vert, const char* frag)
@@ -35,6 +60,7 @@ GLuint FrameWork::Shader::loadProgram(const char* vert, const char* frag)
 	std::vector<GLchar> fragSource;
 	const bool f = ReadShaderSource(frag, fragSource);
 	
+
 	if (v == true && f == true)
 	{
 		return CreateProgram(vertSource.data(), fragSource.data());		
@@ -296,9 +322,16 @@ void FrameWork::Shader::setUniformMatrix4fv(const char* name, const glm::mat4 m)
 	glUniformMatrix4fv(object, 1, false, glm::value_ptr(m));
 }
 
+// ##################################### 削除 ##################################### 
+void FrameWork::Shader::Delete()
+{
+	offset = 0;
+	attributeSize = 0;
+	glDeleteProgram(program);
+}
+
 // ##################################### デストラクタ ##################################### 
 FrameWork::Shader::~Shader()
 {
-	//printf("Shader デストラクタ\n");
-	glDeleteProgram(program);
+	
 }

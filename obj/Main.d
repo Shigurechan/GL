@@ -21,7 +21,7 @@ obj/Main.o: source/Main.cpp source/../header/FrameWork.hpp \
  source/../header/Text.hpp source/../header/Init.hpp \
  source/../header/Window.hpp source/../header/Model.hpp \
  source/../header/Resource.hpp source/../header/Camera.hpp \
- source/../header/Actor.hpp
+ source/../header/Actor.hpp source/../header/VertexData.hpp
 
 source/../header/FrameWork.hpp:
 
@@ -84,3 +84,5 @@ source/../header/Resource.hpp:
 source/../header/Camera.hpp:
 
 source/../header/Actor.hpp:
+
+source/../header/VertexData.hpp:

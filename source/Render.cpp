@@ -8,7 +8,7 @@
 //頂点属性、レンダリングタイプ、頂点数
 FrameWork::D2::Render::Render() : Transform()
 {
-	shader = std::make_shared<FrameWork::Shader>();	//シェーダー
+	shader = nullptr;
 	
 	//vao
 	glGenVertexArrays(1, &vao);
@@ -17,6 +17,7 @@ FrameWork::D2::Render::Render() : Transform()
 	//vbo
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	
 	
 }
 
@@ -45,8 +46,7 @@ FrameWork::D2::Render::~Render()
 //頂点属性、レンダリングタイプ、頂点数
 FrameWork::D3::Render::Render() : Transform()
 {
-	shader = std::make_shared<FrameWork::Shader>();	//シェーダー
-	
+
 	//vao
 	glGenVertexArrays(1, &vao);
 
@@ -56,14 +56,9 @@ FrameWork::D3::Render::Render() : Transform()
 	//eao
 	glGenBuffers(1, &eao);
 	
-	/*
-	glGenBuffers(1, &uio);
-	glBindBuffer(GL_ARRAY_BUFFER, uio);
+
 	
 	
-	glGenBuffers(1, &nio);
-	glBindBuffer(GL_ARRAY_BUFFER, nio);
-	*/
 
 }
 

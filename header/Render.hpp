@@ -46,16 +46,13 @@ namespace FrameWork
 				Render();	//コンストラクタ
 				~Render();	//デストラクタ
 
-				std::shared_ptr<FrameWork::Shader> shader;	//シェーダー
+				Shader *shader;
 
 			protected:
 				
 				GLuint vao;	//VertexArrayObject
 				GLuint vbo;	//VertexBufferObject	
-
 				GLuint eao;	//VertexIndexObject;
-				GLuint uio;	//
-				GLuint nio;	//
 
 
 

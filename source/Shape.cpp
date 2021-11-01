@@ -18,7 +18,7 @@
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Circle::Circle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
 	vertex = FrameWork::Camera::getVertexAttribute();
 }
 
@@ -89,7 +89,7 @@ FrameWork::D2::Circle::~Circle()
 FrameWork::D2::Point::Point() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
 	
 	vertex = FrameWork::Camera::getVertexAttribute();
 
@@ -146,7 +146,9 @@ FrameWork::D2::Point::~Point()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Line::Line() : Render()
 {	
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
+
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(2);
@@ -237,7 +239,7 @@ FrameWork::D2::Line::~Line()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Triangle::Triangle() : Render()
 {
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(3);
@@ -300,8 +302,8 @@ FrameWork::D2::Triangle::~Triangle()
 // ##################################### コンストラクタ ##################################### 
 FrameWork::D2::Rectangle::Rectangle() : Render()
 {		
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
-	
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
+
 	vertex = FrameWork::Camera::getVertexAttribute();
 	vertex->resize(6);
 
@@ -376,7 +378,7 @@ FrameWork::D2::Rectangle::~Rectangle()
 FrameWork::D2::Ellipse::Ellipse() : Render()
 {	
 	
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicMono_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicMono_2D.frag")->data());
+//	shader = std::make_shared("Shader/2D/BasicMono_2D.vert","Shader/2D/BasicMono_2D.frag");
 
 	vertNum = 0; //頂点数
 	vertex = FrameWork::Camera::getVertexAttribute();

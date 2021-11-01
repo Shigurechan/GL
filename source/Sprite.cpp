@@ -1,6 +1,7 @@
 #include "../header/Sprite.hpp"
 
 #include <array>
+#include <memory>
 
 #include "../header/Render.hpp"
 #include "../header/VertexData.hpp"
@@ -16,7 +17,7 @@
 FrameWork::D2::Sprite::Sprite() : Render()
 {
 
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicTexture_D2.vert")->data(), FrameWork::LoadShader("Shader/2D/BasicTexture_D2.frag")->data());
+	shader = std::make_shared<FrameWork::Shader>("Shader/2D/BasicTexture_2D.vert","Shader/2D/BasicTexture_2D.frag");
 
 	vertex = FrameWork::Camera::getVertexAttribute();
 

@@ -23,15 +23,24 @@ namespace FrameWork
             class Object : public Render
             {
             public: 
-                  Object(ObjFile o,const char* vert,const char* frag);
+                  Object(ObjFile *o,short type);
                   ~Object();
+                  
+                  
+                 
+                  void setVertexBuffer();                               //頂点バッファーを設定
+                  void setIndexBuffer();                                //インデックスバッファーを設定
+                  void setVertexAttribute(const char* str,int num);     //頂点バッファを設定
+                  void setTexture(TextureFile *file);                   //テクスチャー設定
+
                   void Renderer();
 
             private:
                   void operator = (const Object &o);  //コピー禁止
-                  ObjFile obj;
+                  ObjFile *obj;
                   GLuint textureID;
-
+                  short renderType;
+                  TextureFile *texture;
             };
 
 

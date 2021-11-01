@@ -148,7 +148,7 @@ void FrameWork::D3::Transform::setRotateMult(glm::vec3 vec,float r)
 {
 	rotateAngle = r;
 	rotateVector = vec;	
-	matRotate = glm::rotate(glm::mat4(1), r, vec) * matRotate;
+	matRotate =  matRotate * glm::rotate(glm::mat4(1), r, vec);
 }
 
 

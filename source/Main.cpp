@@ -3,41 +3,87 @@
 
 #include <iostream>
 #include "../header/Camera.hpp"
+#include "../header/VertexData.hpp"
+
 
 int main()
 {
 	FrameWork::Init(glm::ivec2(800, 600), glm::ivec2(4, 2), "FrameWork"); //初期化
 	FrameWork::Camera::Init();							    //カメラ初期化
 
-	FrameWork::ObjFile lightFile;
-	FrameWork::D3::LoadObj("Model/cube.obj", lightFile);
-	//FrameWork::D3::Object lightCube(lightFile,"Shader/3D/BasicMono_3D.vert","Shader/3D/BasicMono_3D.frag");
-	FrameWork::D3::Object lightCube(lightFile,"Shader/3D/Phong.vert","Shader/3D/Phong.frag");
+
+
+//	FrameWork::Shader shaderCube("Shader/3D/BasicMono.vert","Shader/3D/BasicMono.frag");
+	//FrameWork::Shader shaderCube("Shader/3D/BasicMaterial.vert","Shader/3D/BasicMaterial.frag");
+	FrameWork::Shader shaderCube("Shader/3D/BasicTexture.vert","Shader/3D/BasicTexture.frag");
+
+//	FrameWork::Shader shaderCube("Shader/3D/BasicPhong.vert","Shader/3D/BasicPhong.frag");
+	FrameWork::Shader shaderGround("Shader/3D/BasicMono.vert","Shader/3D/BasicMono.frag");
+	FrameWork::Shader shaderLightCube("Shader/3D/BasicMono.vert","Shader/3D/BasicMono.frag");
+
+	FrameWork::TextureFile texture = FrameWork::LoadTexture("Model/CubeTexture.png");
 
 	FrameWork::ObjFile cubeFile;
-	FrameWork::D3::LoadObj("Model/cube.obj", cubeFile);
-	FrameWork::D3::Object cube(cubeFile,"Shader/3D/Phong.vert","Shader/3D/Phong.frag");
+	FrameWork::D3::LoadObj("Model/TextureCube.obj", cubeFile);	
+	FrameWork::D3::Object cube(&cubeFile,GL_STATIC_DRAW);
+
+	cube.shader = &shaderCube;
+	cube.shader->setVertexAttributeSize(sizeof(FrameWork::D3::VertexAttribute));
+	cube.setVertexAttribute("vertexPosition",3);
+	cube.setVertexAttribute("vertexUV",2);	
+	cube.setVertexAttribute(NULL,3);
+	cube.setVertexBuffer();
+
+	cube.setTexture(&texture);
+
+
+
+	FrameWork::ObjFile lightFile;
+	FrameWork::D3::LoadObj("Model/cube.obj", lightFile);	
+	FrameWork::D3::Object lightCube(&lightFile,GL_STATIC_DRAW);
+
+	lightCube.shader = &shaderLightCube;
+	lightCube.shader->setVertexAttributeSize(sizeof(FrameWork::D3::VertexAttribute));
+	lightCube.setVertexAttribute("vertexPosition",3);
+	lightCube.setVertexAttribute(NULL,2);
+	lightCube.setVertexAttribute(NULL,3);
+	lightCube.setVertexBuffer();
+
+
 
 	FrameWork::ObjFile groundFile;
-	FrameWork::D3::LoadObj("Model/ground.obj", groundFile);
-	FrameWork::D3::Object ground(groundFile,"Shader/3D/Phong.vert","Shader/3D/Phong.frag");
+	FrameWork::D3::LoadObj("Model/cube.obj", groundFile);	
+	FrameWork::D3::Object ground(&groundFile,GL_STATIC_DRAW);
+	ground.shader = &shaderGround;
+	ground.shader->setVertexAttributeSize(sizeof(FrameWork::D3::VertexAttribute));
+	ground.setVertexAttribute("vertexPosition",3);
+	ground.setVertexAttribute(NULL,2);
+	ground.setVertexAttribute(NULL,3);
+	ground.setVertexBuffer();
+
+
+
+
+
+
 
 	float z = 0;
 	float x = 0;
 
+
 	float angleY = 0;
 	float angleX = 0;
-
 	float cameraLookSpeed = PI / 100;	//視点移動速度
 	float cameraMoveSpeed = 10.0f;	//移動速度
 	glm::vec3 cameraLook = glm::vec3(PI /2,PI,0);
-	glm::ivec3 cameraPos = glm::ivec3(0, 130, 150);
+	glm::ivec3 cameraPos = glm::ivec3(0, 0, 100);
 
 
-	glm::vec3 cubePos = glm::vec3(0,0,-10);
-	glm::vec3 lightPos = glm::vec3(0,200,0);
-	glm::vec3 groundPos = glm::vec3(0,-1,-10);
+	glm::vec3 cubePos = glm::vec3(0,0,-1);
+	glm::vec3 lightPos = glm::vec3(0,100,-1);	
+	glm::vec3 groundPos = glm::vec3(0,0,-100);
 
+	bool switchShader = false;
 
 	while (*FrameWork::windowContext)
 	{
@@ -45,38 +91,35 @@ int main()
 
 		if (FrameWork::windowContext->getKeyInput(GLFW_KEY_A) > (short)0)
 		{
-			angleY = 0.001;
+			angleY = (PI / 100);
 
-			cube.setRotate(glm::vec3(0, 1, 0), angleY);
+			cube.setRotateMult(glm::vec3(0, 1, 0), angleY);
 		}
 		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_D) > (short)0)
 		{
-			angleY += -(PI / 100);
-			//cube.setRotate(glm::vec3(0, 1, 0), angleY);
-			ground.setRotate(glm::vec3(1, 0, 0), angleY);
-			printf("%f\n",angleY);
+			angleY = -(PI / 100);
+			cube.setRotateMult(glm::vec3(0, 1, 0), angleY);
+			//ground.setRotate(glm::vec3(1, 0, 0), angleY);
+//			printf("%f\n",angleY);
 
 		}
 		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_W) > (short)0)
 		{
-			angleY += PI / 100;
-			//cube.setRotate(glm::vec3(1, 0, 0), angleY);
-			printf("%f\n",angleY);
-			ground.setRotate(glm::vec3(1, 0, 0), angleY);
+			angleY = PI / 100;
+			cube.setRotateMult(glm::vec3(1, 0, 0), angleY);
+//			printf("%f\n",angleY);
+			//ground.setRotate(glm::vec3(1, 0, 0), angleY);
 		}
 		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_S) > (short)0)
 		{
-			angleY = -0.001;
-			cube.setRotate(glm::vec3(1, 0, 0), angleY);
+			angleY = -PI / 100;
+			cube.setRotateMult(glm::vec3(1, 0, 0), angleY);
 		}
 		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_Z) > (short)0)
 		{
-			cubePos.z += -50;
+			//cubePos.z += -50;
 		}
-		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_X) > (short)0)
-		{
-			cubePos.z += 50;
-		}
+		
 		else if (FrameWork::windowContext->getKeyInput(GLFW_KEY_N) > (short)0)
 		{
 			lightPos.z += -20;
@@ -143,7 +186,6 @@ int main()
 
 
 
-
 		//FrameWork::Camera::setLook(cameraLook);
 		//FrameWork::Camera::setLook(glm::vec3(0,0,-1));
 		FrameWork::Camera::setLook(glm::vec3(cos(cameraLook.x) * cos(cameraLook.y), sin(cameraLook.y), sin(cameraLook.x) * cos(cameraLook.y)));
@@ -153,41 +195,66 @@ int main()
 		// LightCube
 		lightCube.shader->setEnable();
 		lightCube.setPosition(lightPos);
-		lightCube.setScale(glm::vec3(1, 1, 1));
-		//lightCube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));		
-		lightCube.shader->setUniform3f("objectColor", FrameWork::GetGlColor(glm::vec4(255,255,255,255)));
-		lightCube.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		lightCube.shader->setUniform3f("lightPos",lightPos);
-		lightCube.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
+		lightCube.setScale(glm::vec3(10, 10, 10));
+		lightCube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(255,255,255,255)));		
 		lightCube.Renderer();
 		lightCube.shader->setDisable(); 
+
+
 
 		// Cube
 		cube.shader->setEnable();
 		cube.setPosition(cubePos);
-		cube.setScale(glm::vec3(50, 50, 50));
-//		cube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,0,100,255)));
-		cube.shader->setUniform3f("objectColor", FrameWork::GetGlColor(glm::vec4(255,255,255,255)));
-		cube.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		cube.shader->setUniform3f("lightPos",lightPos);
-		cube.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
-		//cube.Renderer();
+		cube.setScale(glm::vec3(25, 25, 25));
+
+		/*
+
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+		glm::vec3 diffuseColor = lightColor   * glm::vec3(1.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+		
+		cube.shader->setUniform3f("light.ambient", ambientColor);
+		cube.shader->setUniform3f("light.diffuse", diffuseColor);
+		cube.shader->setUniform3f("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+		// material properties
+		cube.shader->setUniform3f("material.ambient",glm::vec3(1.0f, 0.5f, 0.31f));
+		cube.shader->setUniform3f("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+		cube.shader->setUniform3f("material.specular", glm::vec3( 0.5f, 0.5f, 0.5f)); // specular lighting doesn't have full effect on this object's material
+		cube.shader->setUniform1f("material.shininess", 32.0f);
+		cube.shader->setUniform3f("uViewPosition", FrameWork::Camera::getPosition());
+		*/
+
+		/*
+		cube.shader->setUniform3f("uObjectColor", FrameWork::GetGlColor(glm::vec4(255,255,255,255)));
+		cube.shader->setUniform3f("uLightColor", FrameWork::GetGlColor(glm::vec4(255,255,255,255)));
+		cube.shader->setUniform3f("uLightPosition",lightPos);
+		cube.shader->setUniform3f("uViewPosition", FrameWork::Camera::getPosition());
+		cube.shader->setUniform1f("uAmbientStrength",0.1f);
+		cube.shader->setUniform1f("uSpecularStrength",0.5f);
+		cube.shader->setUniform1f("uShininessStrength",16.0f);
+		*/
+
+
+	//	cube.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(100,0,0,255)));
+		cube.Renderer();
 		cube.shader->setDisable();
+
+
+/*
 
 		// Ground
 		ground.shader->setEnable();
 		ground.setPosition(groundPos);
-		ground.setRotate(glm::vec3(1,0,0),PI);
-		ground.setScale(glm::vec3(50, 50, 50));
-		ground.shader->setUniform3f("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-		ground.shader->setUniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		ground.shader->setUniform3f("lightPos", lightPos);
-		ground.shader->setUniform3f("viewPos", FrameWork::Camera::getPosition());
-		// ground.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,100,0,255)));
+		ground.setScale(glm::vec3(1000, 1,1000));
+		ground.shader->setUniform4f("uFragment",FrameWork::GetGlColor(glm::vec4(0,100,0,255)));
 		ground.Renderer();
 		ground.shader->setDisable();
 
-
+*/
 
 
 

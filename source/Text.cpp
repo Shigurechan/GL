@@ -26,7 +26,7 @@ FrameWork::D2::Text::Text() : FrameWork::D2::Render()
 {
 
     //シェーダー読み込み
-	shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
+	//shader->Input(FrameWork::LoadShader("Shader/2D/BasicText_2D.vert")->data(),FrameWork::LoadShader("Shader/2D/BasicText_2D.frag")->data());
 
     vertex = FrameWork::Camera::getVertexAttribute();
     text.clear();

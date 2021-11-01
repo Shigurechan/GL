@@ -31,13 +31,14 @@ namespace FrameWork
 		windowContext = std::make_shared<Window>(size, title); //ウインドウコンテキストを生成
 
 		glEnable(GL_BLEND);						//ブレンド有効
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//ブレンドを指定
 		glEnable(GL_TEXTURE_2D);					//テクスチャを有効
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//ブレンドタイプ
 		glEnable(GL_MULTISAMPLE);				   	//MSAA
 		glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);			//半透明
 		glEnable(GL_DEPTH_TEST);				   	//深度バッファを有効
-		glDepthFunc(GL_ALWAYS);					   	//深度バッファのタイプ
+		//glDepthFunc(GL_ALWAYS);					   	//深度バッファのタイプ
+		//glDepthFunc(GL_LEQUAL);
+
 		glEnable(GL_CULL_FACE);					   	//カリングを有効
 		glCullFace(GL_BACK);					   	//裏面を無効
 
