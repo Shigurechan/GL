@@ -33,7 +33,6 @@ int main()
 	cube.setVertexAttribute("vertexUV",2);	
 	cube.setVertexAttribute(NULL,3);
 	cube.setVertexBuffer();
-
 	cube.setTexture(&texture);
 
 
