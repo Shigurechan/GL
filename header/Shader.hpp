@@ -24,11 +24,18 @@ namespace FrameWork
 		void setEnable();	 //有効
 		void setDisable(); //無効
 
-		// Uniform 設定
+		// Uniform float型 設定
 		void setUniform1f(const char *name, const float vec);
 		void setUniform2f(const char *name, const glm::vec2 vec);
 		void setUniform3f(const char *name, const glm::vec3 vec);
 		void setUniform4f(const char *name, const glm::vec4 vec);
+
+		// Uniform  int型 設定
+		void setUniform1i(const char *name, const int vec);
+		void setUniform2i(const char *name, const glm::ivec2 vec);
+		void setUniform3i(const char *name, const glm::ivec3 vec);
+		void setUniform4i(const char *name, const glm::ivec4 vec);
+
 
 		// Unform行列　設定
 		void setUniformMatrix2fv(const char *name, const glm::mat2 m);

@@ -31,16 +31,15 @@ namespace FrameWork
                   void setVertexBuffer();                               //頂点バッファーを設定
                   void setIndexBuffer();                                //インデックスバッファーを設定
                   void setVertexAttribute(const char* str,int num);     //頂点バッファを設定
-                  void setTexture(TextureFile *file);                   //テクスチャー設定
+                  void setTexture(GLuint tex);                   //テクスチャー設定
 
                   void Renderer();
 
             private:
                   void operator = (const Object &o);  //コピー禁止
                   ObjFile *obj;
-                  GLuint textureID;
                   short renderType;
-                  TextureFile *texture;
+                  std::vector<GLuint> textureID;
             };
 
 

@@ -43,7 +43,7 @@ namespace FrameWork
             glBindTexture(GL_TEXTURE_2D,texture);
             glEnable(GL_TEXTURE_2D);
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, data.size.x, data.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)data.fileData);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, data.size.x, data.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (byte*)data.fileData);
 
             // テクスチャの補間設定
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

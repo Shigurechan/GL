@@ -298,6 +298,44 @@ void FrameWork::Shader::setUniform4f(const char* name, const glm::vec4 vec)
 	glUniform4f(object, vec.x, vec.y, vec.z, vec.w);	
 }
 
+
+
+// ##################################### vec1 ##################################### 
+void FrameWork::Shader::setUniform1i(const char* name, const int vec)
+{
+	const GLuint object = glGetUniformLocation(program, name);
+	if (object == -1) { assert(0); }	//エラー処理
+	glUniform1i(object,vec);
+}
+
+// ##################################### vec2 ##################################### 
+void FrameWork::Shader::setUniform2i(const char* name, const glm::ivec2 vec)
+{
+	const GLuint object = glGetUniformLocation(program, name);
+	if (object == -1) { assert(0); }	//エラー処理
+	glUniform2i(object,vec.x,vec.y);
+}
+
+// ##################################### vec3 ##################################### 
+void FrameWork::Shader::setUniform3i(const char* name, const glm::ivec3 vec)
+{
+	const GLuint object = glGetUniformLocation(program, name);
+	if (object == -1) { assert(0); }	//エラー処理
+	glUniform3i(object,vec.x, vec.y,vec.z);
+}
+
+// ##################################### vec4 ##################################### 
+void FrameWork::Shader::setUniform4i(const char* name, const glm::ivec4 vec)
+{	
+	const GLuint object = glGetUniformLocation(program,name);
+	if (object == -1) { assert(0); }	//エラー処理
+	glUniform4i(object, vec.x, vec.y, vec.z, vec.w);	
+}
+
+
+
+
+
 // ##################################### mat2 ##################################### 
 void FrameWork::Shader::setUniformMatrix2fv(const char* name, const glm::mat2 m)
 {

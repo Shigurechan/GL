@@ -23,25 +23,9 @@ FrameWork::D3::Object::Object(ObjFile *o, short type) : Render()
       obj = o; //オブジェクトファイル
 }
 
-void FrameWork::D3::Object::setTexture(TextureFile *file)
+void FrameWork::D3::Object::setTexture(GLuint tex)
 {
-      texture = file;
-
-      glGenTextures(1, &textureID);            //テクスチャIDの生成
-      glBindTexture(GL_TEXTURE_2D, textureID); // IDバインド
-
-      //テクスチャ生成
-
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, file->size.x, file->size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, file->fileData);
-
-      // テクスチャの補間設定
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glGenerateMipmap(GL_TEXTURE_2D);
-
-      glBindTexture(GL_TEXTURE_2D, 0);
+     textureID.push_back(tex);
 }
 
 void FrameWork::D3::Object::setVertexAttribute(const char *str, int num)
@@ -73,14 +57,22 @@ void FrameWork::D3::Object::setIndexBuffer()
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+
+
+
+
 void FrameWork::D3::Object::Renderer()
 {
       // shader->setEnable();
       glBindVertexArray(vao);
       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      glBindTexture(GL_TEXTURE_2D, textureID); // IDバインド
 
       glActiveTexture(GL_TEXTURE0); //テクスチャ有効
+      glBindTexture(GL_TEXTURE_2D, textureID.at(0)); // IDバインド
+//      glActiveTexture(GL_TEXTURE1); //テクスチャ有効
+//      glBindTexture(GL_TEXTURE_2D, textureID.at(1)); // IDバインド
+
+      
 
       //描画
       shader->setUniformMatrix4fv("uTranslate", getMatTranslation());
@@ -94,9 +86,6 @@ void FrameWork::D3::Object::Renderer()
             // glDrawElements(GL_TRIANGLES, obj->index.size(), GL_UNSIGNED_INT,(void*)0); //描画
             // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
       }
-      else
-      {
-      }
 
       glDrawArrays(GL_TRIANGLES, 0, obj->attribute.size()); //描画
 
@@ -104,6 +93,8 @@ void FrameWork::D3::Object::Renderer()
       glBindVertexArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindTexture(GL_TEXTURE_2D, 0);
+  //    glBindTexture(GL_TEXTURE_2D, 1);
+      
       // shader->setDisable();
 }
 
@@ -198,7 +189,7 @@ void FrameWork::D3::LoadObj(const char *fileName, ObjFile &attribute)
                   attrib.position[2] = v.z;
 
                   attrib.uv[0] = u.x;
-                  attrib.uv[1] = u.y;
+                  attrib.uv[1] = -u.y;
 
                   attrib.normal[0] = n.x;
                   attrib.normal[1] = n.y;

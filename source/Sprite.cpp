@@ -52,10 +52,10 @@ void FrameWork::D2::Sprite::InputTexture(FrameWork::TextureFile tex)
 
 	glGenTextures(1, &textureID);		     //テクスチャIDの生成
 	glBindTexture(GL_TEXTURE_2D, textureID); //IDバインド
-	size = tex.size;				     //サイズ
+	//size = tex.size;				     //サイズ
 
 	//テクスチャ生成
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size.x, tex.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.fileData);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.size.x, tex.size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.fileData);
 
 	// テクスチャの補間設定
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
