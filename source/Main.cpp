@@ -26,7 +26,6 @@ int main()
 	FrameWork::ObjFile cubeFile;
 	FrameWork::D3::LoadObj("Model/TextureCube.obj", cubeFile);	
 	FrameWork::D3::Object cube(&cubeFile,GL_STATIC_DRAW);
-
 	cube.shader = &shaderCube;
 	cube.shader->setVertexAttributeSize(sizeof(FrameWork::D3::VertexAttribute));
 	cube.setVertexAttribute("vertexPosition",3);
